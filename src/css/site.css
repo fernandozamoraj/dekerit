@@ -1,0 +1,13 @@
+.onehd > .btn{
+    width: 100%;
+}
+
+.onhd > input{
+    width: 100%;
+}
+
+.sign-in{
+    border-width: 2;
+    border-style: solid;
+    border-color: #ff000;
+}
