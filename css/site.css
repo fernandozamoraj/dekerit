@@ -13,20 +13,20 @@
 }
 
 i.icon-blue{
-    color: blue
+    color: #38a
 }
 
 i.icon-red{
-    color: #a00
+    color: #c55;
 }
 
 i.icon-yellow{
-    color: #fa5
+    color: #ca7;
 }
 
 
 i.icon-green{
-    color: blue
+    color: #38a;
 }
 
 i.icon-menu{
@@ -48,6 +48,10 @@ i.icon-menu-status{
 
 i.icon-menu-news{
     background-color: #a5f;
+}
+
+i.icon-menu-log{
+    background-color: #696;
 }
 
 .card{
