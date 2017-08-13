@@ -9,7 +9,7 @@
 .sign-in{
     border-width: 2;
     border-style: solid;
-    border-color: #ff000;
+    border-color: #ff0000;
 }
 
 i.icon-blue{
@@ -23,3 +23,35 @@ i.icon-red{
 i.icon-yellow{
     color: #fa5
 }
+
+
+i.icon-green{
+    color: blue
+}
+
+i.icon-menu{
+    color: #355;
+    background-color: #ccc;
+}
+
+i.icon-menu-home{
+    background-color: #c55;
+}
+
+i.icon-menu-friends{
+    background-color: #38a;
+}
+
+i.icon-menu-status{
+    background-color: #ca7;
+}
+
+i.icon-menu-news{
+    background-color: #a5f;
+}
+
+.card{
+    background-color: #355;
+}
+
+
