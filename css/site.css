@@ -11,3 +11,15 @@
     border-style: solid;
     border-color: #ff000;
 }
+
+i.icon-blue{
+    color: blue
+}
+
+i.icon-red{
+    color: #a00
+}
+
+i.icon-yellow{
+    color: #fa5
+}
