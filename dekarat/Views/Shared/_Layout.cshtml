@@ -24,10 +24,10 @@
                     <a href="#" class="brand-logo center teal darken-4" data-bind="text: Title"></a>
                     <ul id="nav-mobile" class="left">
                         <li><a href="#"><i class="material-icons left">directions_run</i></a></li>
-                        <li><a href="#"><i class="material-icons right">directions_bike</i></a></li>
+                        <li class="hide-on-small-only"><a href="#"><i class="material-icons right">directions_bike</i></a></li>
                     </ul>
                     <ul id="nav-mobile" class="right">
-                        <li><a href="#"><i class="material-icons left">local_dining</i></a></li>
+                        <li class="hide-on-small-only"><a href="#"><i class="material-icons left">local_dining</i></a></li>
                         <li><a href="#" id="sign-out"><i class="material-icons right">power_settings_new</i></a></li>
                     </ul>
                 </div>
@@ -107,9 +107,7 @@
 
          }
 
-        $(document).ready(function () {
-
-            
+        $(document).ready(function () {            
 
             $('#sign-in').click(function () {
                 //TODO: change later to a better approach to signing in
