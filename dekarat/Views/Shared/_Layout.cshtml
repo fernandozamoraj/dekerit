@@ -72,6 +72,14 @@
                 model.Title("dekarat")
                 model.Message("Welcome to dekarat, a place where you can motivate yourself "
                             + "and your friends to practice healthy habits in a fun way.")
+                $('#sign-in').click(function () {
+                    //TODO: change later to a better approach to signing in
+                    handleSignIn()
+                })
+
+                $('#create-account').click(function () {
+                    handleChangeView("createaccount")
+                })
             })
 
             $('#friends-feed').click(function () {
@@ -98,6 +106,8 @@
                 model.Title("log entry")
                 $('select').material_select();
             })
+
+
 
             model.Message("")
             model.Title("log entry")
