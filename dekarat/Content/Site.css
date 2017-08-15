@@ -1,0 +1,83 @@
+﻿/* original 
+    body {
+        padding-top: 50px;
+        padding-bottom: 20px;
+    }
+
+    .body-content {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    input,
+    select,
+    textarea {
+        max-width: 280px;
+    }
+
+*/
+.onehd > .btn{
+    width: 100%;
+}
+
+.onhd > input{
+    width: 100%;
+}
+
+.sign-in{
+    border-width: 2;
+    border-style: solid;
+    border-color: #ff0000;
+}
+
+i.icon-blue{
+    color: #38a
+}
+
+i.icon-red{
+    color: #c55;
+}
+
+i.icon-yellow{
+    color: #ca7;
+}
+
+
+i.icon-green{
+    color: #38a;
+}
+
+i.icon-menu{
+    color: #355;
+    background-color: #ccc;
+}
+
+i.icon-menu-home{
+    background-color: #c55;
+}
+
+i.icon-menu-friends{
+    background-color: #38a;
+}
+
+i.icon-menu-status{
+    background-color: #ca7;
+}
+
+i.icon-menu-news{
+    background-color: #a5f;
+}
+
+i.icon-menu-log{
+    background-color: #696;
+}
+
+.card{
+    background-color: #355;
+}
+
+.body{
+    color: #455
+}
+
+

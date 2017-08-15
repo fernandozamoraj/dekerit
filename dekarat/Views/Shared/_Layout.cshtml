@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!--meta name="viewport" content="width=device-width, initial-scale=1.0"--><!--Original-->
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="~/Content/materialize/css/materialize.min.css" media="screen,projection" />
+    <link rel="stylesheet" href="~/Content/Site.css">
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m9">
+                <div class="card">
+                    <div class="card-content white-text">
+                        <span class="card-title">
+                            <a data-bind="text: Title"></a>
+                            <i class="material-icons left">directions_run</i>
+                            <i class="material-icons right">directions_bike</i>
+                        </span>
+                        <p data-bind="text: Message">
+  
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        @RenderBody()
+
+    </div>
+
+    <!--script src="~/Scripts/jquery-1.10.2.min.js"></script-->
+    <!--script src="~/Scripts/bootstrap.min.js"></script-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+    <script type="text/javascript" src="~/Scripts/materialize/materialize.min.js"></script>
+    <script>
+
+        var model = {
+            CurrentView: ko.observable("main"),
+            SignedIn: ko.observable(false),
+            Title: ko.observable("dekarat"),
+            Message: ko.observable("Welcome to dekarat, a place where you can motivate yourself "
+                            + "and your friends to practice healthy habits in a fun way."),
+            changedView: function (x) {
+                handleChangeView(x)
+            }
+        }
+
+        function handleChangeView(x) {
+            model.CurrentView(x)
+        }
+
+        function handleSignIn() {
+          
+            model.SignedIn(true)
+            handleChangeView("logitem")
+
+            //cannot bind on document ready because these were not rendered intitally
+            $('#main').click(function () {
+                handleChangeView("main")
+                model.Message("Welcome to dekarat, a place where you can motivate yourself "
+                            + "and your friends to practice healthy habits in a fun way.")
+            })
+
+            $('#friends-feed').click(function () {
+                handleChangeView("friendsfeed")
+                model.Message("")
+            })
+
+            $('#status').click(function () {
+                handleChangeView("status")
+                model.Message("")
+            })
+
+            $('#news').click(function () {
+                handleChangeView("news")
+                model.Message("")
+            })
+
+            $('#log-item').click(function () {
+                handleChangeView("logitem")
+                model.Message("")
+            })
+        }
+
+        $(document).ready(function () {
+            $('select').material_select();
+
+
+            $('#sign-in').click(function () {
+                //TODO: change later to a better approach to signing in
+                handleSignIn()
+            })
+
+            $('#create-account').click(function () {
+                handleChangeView("createaccount")
+            })
+
+            model.CurrentView("main")
+            ko.applyBindings(model)
+        });
+    </script>
+</body>
+</html>

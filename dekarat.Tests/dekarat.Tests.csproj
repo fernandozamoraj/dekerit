@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EC19D8AB-86A5-4F54-B0A3-49C82E934D59}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>dekarat.Tests</RootNamespace>
+    <AssemblyName>dekarat.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="UnitTest1.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dekarat\dekarat.csproj">
+      <Project>{DBD2A66A-A098-40DC-931B-1E21A618B120}</Project>
+      <Name>dekarat</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="content\materialize\css\materialize.css" />
+    <Content Include="content\materialize\css\materialize.min.css" />
+    <Content Include="content\materialize\font\material-design-icons\LICENSE.txt" />
+    <Content Include="content\materialize\font\material-design-icons\Material-Design-Icons.svg" />
+    <Content Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.1.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Scripts\knockout-3.4.2.debug.js" />
+    <Content Include="Scripts\knockout-3.4.2.js" />
+    <Content Include="Scripts\materialize\materialize.js" />
+    <Content Include="Scripts\materialize\materialize.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="content\materialize\fonts\roboto\Roboto-Bold.eot" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Bold.ttf" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Bold.woff" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Bold.woff2" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Light.eot" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Light.ttf" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Light.woff" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Light.woff2" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Medium.eot" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Medium.ttf" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Medium.woff" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Medium.woff2" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Regular.eot" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Regular.ttf" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Regular.woff" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Regular.woff2" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Thin.eot" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Thin.ttf" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Thin.woff" />
+    <None Include="content\materialize\fonts\roboto\Roboto-Thin.woff2" />
+    <None Include="content\materialize\font\material-design-icons\Material-Design-Icons.eot" />
+    <None Include="content\materialize\font\material-design-icons\Material-Design-Icons.ttf" />
+    <None Include="content\materialize\font\material-design-icons\Material-Design-Icons.woff" />
+    <None Include="content\materialize\font\material-design-icons\Material-Design-Icons.woff2" />
+    <None Include="content\materialize\font\roboto\Roboto-Bold.eot" />
+    <None Include="content\materialize\font\roboto\Roboto-Bold.ttf" />
+    <None Include="content\materialize\font\roboto\Roboto-Bold.woff" />
+    <None Include="content\materialize\font\roboto\Roboto-Bold.woff2" />
+    <None Include="content\materialize\font\roboto\Roboto-Light.eot" />
+    <None Include="content\materialize\font\roboto\Roboto-Light.ttf" />
+    <None Include="content\materialize\font\roboto\Roboto-Light.woff" />
+    <None Include="content\materialize\font\roboto\Roboto-Light.woff2" />
+    <None Include="content\materialize\font\roboto\Roboto-Medium.eot" />
+    <None Include="content\materialize\font\roboto\Roboto-Medium.ttf" />
+    <None Include="content\materialize\font\roboto\Roboto-Medium.woff" />
+    <None Include="content\materialize\font\roboto\Roboto-Medium.woff2" />
+    <None Include="content\materialize\font\roboto\Roboto-Regular.eot" />
+    <None Include="content\materialize\font\roboto\Roboto-Regular.ttf" />
+    <None Include="content\materialize\font\roboto\Roboto-Regular.woff" />
+    <None Include="content\materialize\font\roboto\Roboto-Regular.woff2" />
+    <None Include="content\materialize\font\roboto\Roboto-Thin.eot" />
+    <None Include="content\materialize\font\roboto\Roboto-Thin.ttf" />
+    <None Include="content\materialize\font\roboto\Roboto-Thin.woff" />
+    <None Include="content\materialize\font\roboto\Roboto-Thin.woff2" />
+    <None Include="packages.config" />
+    <None Include="Scripts\jquery-2.1.1.min.map" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

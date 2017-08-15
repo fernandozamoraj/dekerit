@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<!-- ko if: model.SignedIn() == true-->
+@Html.Partial("menu")
+<!-- /ko -->
+
+<!-- ko if: model.CurrentView() == "main"-->
+    @Html.Partial("main")
+<!-- /ko -->
+
+<!-- ko if: model.CurrentView() == "addfriend"-->
+    @Html.Partial("addfriend")
+<!-- /ko -->
+
+<!-- ko if: model.CurrentView() == "createaccount"-->
+    @Html.Partial("createaccount")
+<!-- /ko -->
+
+<!-- ko if: model.CurrentView() == "friendsfeed"-->
+    @Html.Partial("friendsfeed")
+<!-- /ko -->
+
+<!-- ko if: model.CurrentView() == "logitem"-->
+    @Html.Partial("logitem")
+<!-- /ko -->
+
+<!-- ko if: model.CurrentView() == "news"-->
+@Html.Partial("news")
+<!-- /ko -->
+
+<!-- ko if: model.CurrentView() == "status"-->
+@Html.Partial("status")
+<!-- /ko -->
+
+<!-- ko if: model.CurrentView() == "successfulaccount"-->
+@Html.Partial("successfulaccount")
+<!-- /ko -->
+
