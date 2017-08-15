@@ -17,22 +17,23 @@
 <body>
 
     <div class="container">
+
         <div class="row">
-            <div class="col s12 m9">
-                <div class="card">
-                    <div class="card-content white-text">
-                        <span class="card-title">
-                            <a data-bind="text: Title"></a>
-                            <i class="material-icons left">directions_run</i>
-                            <i class="material-icons right">directions_bike</i>
-                        </span>
-                        <p data-bind="text: Message">
-  
-                        </p>
-                    </div>
+            <nav class="col s12 m9  teal darken-4 ">
+                <div class="nav-wrapper">
+                    <a href="#" class="brand-logo center teal darken-4" data-bind="text: Title"></a>
+                    <ul id="nav-mobile" class="left">
+                        <li><a href="#"><i class="material-icons left">directions_run</i></a></li>
+                        <li><a href="#"><i class="material-icons right">directions_bike</i></a></li>
+                    </ul>
+                    <ul id="nav-mobile" class="right">
+                        <li><a href="#"><i class="material-icons left">local_dining</i></a></li>
+                        <li><a href="#" id="sign-out"><i class="material-icons right">power_settings_new</i></a></li>
+                    </ul>
                 </div>
-            </div>
+            </nav>
         </div>
+        
         
         @RenderBody()
 
@@ -49,8 +50,7 @@
             CurrentView: ko.observable("main"),
             SignedIn: ko.observable(false),
             Title: ko.observable("dekarat"),
-            Message: ko.observable("Welcome to dekarat, a place where you can motivate yourself "
-                            + "and your friends to practice healthy habits in a fun way."),
+            Message: ko.observable(""),
             changedView: function (x) {
                 handleChangeView(x)
             }
@@ -63,11 +63,13 @@
         function handleSignIn() {
           
             model.SignedIn(true)
-            handleChangeView("logitem")
+           
 
-            //cannot bind on document ready because these were not rendered intitally
+            //I cannot bind on document ready because these were not rendered intitally
+            //so I had to do the binding here instead.
             $('#main').click(function () {
                 handleChangeView("main")
+                model.Title("dekarat")
                 model.Message("Welcome to dekarat, a place where you can motivate yourself "
                             + "and your friends to practice healthy habits in a fun way.")
             })
@@ -75,27 +77,39 @@
             $('#friends-feed').click(function () {
                 handleChangeView("friendsfeed")
                 model.Message("")
+                model.Title("friends feed")
             })
 
             $('#status').click(function () {
                 handleChangeView("status")
                 model.Message("")
+                model.Message("status")
             })
 
             $('#news').click(function () {
                 handleChangeView("news")
                 model.Message("")
+                model.Title("news")
             })
 
             $('#log-item').click(function () {
                 handleChangeView("logitem")
                 model.Message("")
+                model.Title("log entry")
+                $('select').material_select();
             })
-        }
+
+            model.Message("")
+            model.Title("log entry")
+            handleChangeView("logitem")
+            $('select').material_select();
+            
+
+         }
 
         $(document).ready(function () {
-            $('select').material_select();
 
+            
 
             $('#sign-in').click(function () {
                 //TODO: change later to a better approach to signing in
