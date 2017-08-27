@@ -13,38 +13,8 @@
     <link type="text/css" rel="stylesheet" href="~/Content/materialize/css/materialize.min.css" media="screen,projection" />
     <link rel="stylesheet" href="~/Content/Site.css">
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
-    <script src="~/Scripts/jquery-2.1.1.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {}
-        var database;
 
-        $.getJSON("/scripts/firebase_config.js", function (data) {
-            config = data
-            console.log(config)
-            firebase.initializeApp(config);
-            setup()
-        })
 
-        function setup() {
-            database = firebase.database();
-
-            /*
-            userRef = database.ref("myusers")
-            auth = firebase.auth()
-            auth.onAuthStateChanged(function (firebaseUser) {
-                //TODO get firebaseuser
-            })
-            */
-        }
-
-        function getTextValue(inputId) {
-            var element = document.getElementById(inputId)
-            return element.value
-        }
-
-    </script>
 </head>
 <body>
 
@@ -73,7 +43,32 @@
 
     <!--script src="~/Scripts/jquery-1.10.2.min.js"></script-->
     <!--script src="~/Scripts/bootstrap.min.js"></script-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase-database.js"></script>
+
+    <script>
+        //**********************set up firebase
+
+        // Initialize Firebase
+
+        var database;
+
+
+        var config = {
+            apiKey: "AIzaSyBuQxBetnwE7nPtvUUCi3TeoXlHz7IS9rw",
+            authDomain: "dekarat-5b449.firebaseapp.com",
+            databaseURL: "https://dekarat-5b449.firebaseio.com",
+            projectId: "dekarat-5b449",
+            storageBucket: "dekarat-5b449.appspot.com",
+            messagingSenderId: "126688609895"
+        }
+
+        firebase.initializeApp(config)
+        database = firebase.database()
+    </script>
     <script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
     <script type="text/javascript" src="~/Scripts/materialize/materialize.min.js"></script>
     <script type="text/javascript" src="~/Scripts/app.js"></script>

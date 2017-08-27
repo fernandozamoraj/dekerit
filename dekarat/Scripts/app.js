@@ -3,6 +3,21 @@ var USER_SIGNED_OUT_MESSAGE = 'user signed out or failed to sign in...'
 var USER_SIGNED_IN_MESSAGE = ' user signed in...'
 var user;
 
+
+
+
+
+
+
+function getTextValue(inputId) {
+    var element = document.getElementById(inputId)
+    return element.value
+}
+
+
+
+//*****************end of setup firebase
+
 var model = {
     Feed: ko.observableArray(),
     CurrentView: ko.observable("main"),
@@ -19,20 +34,31 @@ function handleChangeView(x) {
 }
 
 function handleSignOut() {
-    var $toastContent = 'You are now signed out of your session';
 
-    Materialize.toast($toastContent, 4000);
+    console.log("Handling signout....")
+    console.log(model)
+    console.log(user)
+    if (model.SignedIn() === true) {
 
-    firebase.auth().signOut().then(function () {
-        console.log(USER_SIGNED_OUT_MESSAGE)
-    })
+        
+        var $toastContent = 'You are now signed out of your session';
+
+        Materialize.toast($toastContent, 4000);
+
+        firebase.auth().signOut().then(function () {
+            console.log(USER_SIGNED_OUT_MESSAGE)
+        })
+    }
 }
 
 function bindCreateAccountScreen() {
 
     $('#create-account-screen').click(function () {
+        console.log("cas 1")
         handleSignOut()
+        console.log("cas 2")
         handleChangeView("createaccount")
+        console.log("cas 3")
         addCreateAccountEvents(handleSignIn)
 
     })
