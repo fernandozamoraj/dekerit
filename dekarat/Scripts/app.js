@@ -132,7 +132,7 @@ function validateSignIn(onSuccess){
 
         if (firebaseUser) {
 
-            var userref = firebase.database().ref('users/'+firebaseUser.uid)
+            var userref = database.ref('users/'+firebaseUser.uid)
 
             userref.on('value', function(snap){
                 user = snap.val()
@@ -189,7 +189,7 @@ function addCreateAccountEvents(onSuccess) {
                 //This code sets the id (key) of user to the firebaseuserid
                 //Instead of using push we use set so that we can have control over
                 //the key.
-                var users = firebase.database().ref('users')
+                var users = database.ref('users')
                 users.child(firebaseUser.uid).set(user)
                 Materialize.toast("Account successfuly created", 2000)
                 Materialize.toast("You are now signed in", 2000)
@@ -245,7 +245,7 @@ function getDateString(pastDate) {
 }
 
 function bindLogEntries() {
-    firebase.database().ref("log_entries").child(user.uid).on('value', function (snap) {
+    database.ref("log_entries").child(user.uid).on('value', function (snap) {
         
         console.log("Binding log entries...")
         console.log(snap.val())
@@ -280,7 +280,7 @@ function handleNewActivityEntry() {
 
     //time is in milliseconds since 1970/01/01... perfect for sorting activities
 
-    firebase.database().ref("log_entries").child(user.uid).child(d.getTime()).set({
+    database.ref("log_entries").child(user.uid).child(d.getTime()).set({
         uid: user.uid,
         activity: option,
         remarks: txtRemarks.value,
