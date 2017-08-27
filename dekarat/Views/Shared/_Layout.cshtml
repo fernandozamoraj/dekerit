@@ -20,7 +20,7 @@
         var config = {}
         var database;
 
-        $.getJSON("/scripts/firebase_config.json", function (data) {
+        $.getJSON("/scripts/firebase_config.js", function (data) {
             config = data
             console.log(config)
             firebase.initializeApp(config);
