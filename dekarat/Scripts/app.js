@@ -4,6 +4,7 @@ var USER_SIGNED_IN_MESSAGE = ' user signed in...'
 var user;
 
 var model = {
+    Feed: ko.observableArray(),
     CurrentView: ko.observable("main"),
     SignedIn: ko.observable(false),
     Title: ko.observable("dekarat"),
@@ -92,8 +93,9 @@ function switchToLogEntry() {
     model.Message("")
     $('select').material_select();
     $('#entry-submit').click(function () {
-        handleEntrySubmit()
+        handleNewActivityEntry()
     })
+    bindLogEntries()
 }
 
 $(document).ready(function () {
@@ -208,19 +210,81 @@ function addCreateAccountEvents(onSuccess) {
     })
 }
 
+function getDateString(pastDate) {
 
-function handleEntrySubmit() {
+    var d = new Date();
+    var currentTime = d.getTime()
+    var diff = currentTime - pastDate
+
+    var minutes = Math.floor((diff / 1000) / 60)
+    var hours = Math.floor(minutes / 60)
+    var days = Math.floor(hours / 24)
+    var returnVal = ''
+    if (days > 0) {
+        returnVal = days + " days ago"
+        if (days == 1) {
+            returnVal = days + " day ago"
+        }
+    }
+    else if (hours > 0) {
+        returnVal = hours + " hours ago"
+
+        if (hours == 1) {
+            returnVal = hours + " hour ago"
+        }
+    }
+    else if (minutes > 0) {
+        returnVal = minutes + " minutes ago"
+        if (minutes == 1) {
+            returnVal = minutes + " minute ago"
+        }
+    }
+
+
+    return returnVal
+}
+
+function bindLogEntries() {
+    firebase.database().ref("log_entries").child(user.uid).on('value', function (snap) {
+        
+        console.log("Binding log entries...")
+        console.log(snap.val())
+        var lastTwentyEntrys = []
+        snap.forEach(function (x) {
+            if (lastTwentyEntrys.length > 20) {
+                lastTwentyEntrys.pop()
+            }
+
+            lastTwentyEntrys.unshift(x.val())
+        })
+
+        model.Feed([])
+
+        for (var i = 0; i < lastTwentyEntrys.length; i++) {
+            model.Feed.push({
+                activity: lastTwentyEntrys[i].activity,
+                remarks: lastTwentyEntrys[i].remarks,
+                date: getDateString(lastTwentyEntrys[i].date),
+                displayName: user.displayName,
+            });
+        }
+    })
+}
+
+function handleNewActivityEntry() {
     var txtRemarks = document.getElementById('entry-remarks')
     var lb = document.getElementById('entry-options')
     var d = new Date()
 
     var option = lb.options[lb.selectedIndex].text;
 
+    //time is in milliseconds since 1970/01/01... perfect for sorting activities
+
     firebase.database().ref("log_entries").child(user.uid).child(d.getTime()).set({
         uid: user.uid,
         activity: option,
         remarks: txtRemarks.value,
-        date: d.getTime()
+        date: d.getTime() 
     })
 }
 
