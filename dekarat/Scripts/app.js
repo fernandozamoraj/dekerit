@@ -3,21 +3,12 @@ var USER_SIGNED_OUT_MESSAGE = 'user signed out or failed to sign in...'
 var USER_SIGNED_IN_MESSAGE = ' user signed in...'
 var user;
 
-
-
-
-
-
-
 function getTextValue(inputId) {
     var element = document.getElementById(inputId)
     return element.value
 }
 
-
-
 //*****************end of setup firebase
-
 var model = {
     Feed: ko.observableArray(),
     CurrentView: ko.observable("main"),
@@ -72,18 +63,8 @@ function handleSignIn() {
     //I cannot bind on document ready because these were not rendered intitally
     //so I had to do the binding here instead.
     $('#main').click(function () {
-        handleChangeView("main")
         model.Title("dekarat")
-        model.Message("Welcome to dekarat, a place where you can motivate yourself "
-                    + "and your friends to practice healthy habits in a fun way.")
-
-        //for some reason sign-in and create-account unbind when home is clicked
-        $('#sign-in').click(function () {
-            //TODO: change later to a better approach to signing in
-            validateSignIn(handleSignIn)
-        })
-
-        bindCreateAccountScreen()
+        signoutToMain()
     })
 
     $('#friends-feed').click(function () {
@@ -124,6 +105,17 @@ function switchToLogEntry() {
     bindLogEntries()
 }
 
+function signoutToMain(){
+    handleSignOut()
+    handleChangeView("main")
+    bindCreateAccountScreen()
+    //for some reason sign-in and create-account unbind when home is clicked
+    $('#sign-in').click(function () {
+        //TODO: change later to a better approach to signing in
+        validateSignIn(handleSignIn)
+    })
+}
+
 $(document).ready(function () {
 
     $('#sign-in').click(function () {
@@ -131,12 +123,7 @@ $(document).ready(function () {
         validateSignIn(handleSignIn)
     })
 
-    $('#sign-out').click(
-        function () {
-            handleSignOut()
-            handleChangeView("main")
-        }
-     )
+    $('#sign-out').click(signoutToMain)
 
 
 
@@ -150,33 +137,49 @@ $(document).ready(function () {
 //TODO: check for real email
 function validateSignIn(onSuccess){
 
-    var txtEmail = document.getElementById('email')
-    var txtPassword = document.getElementById('password')
+    var txtEmail = document.getElementById('e-mail')
+    var txtPassword = document.getElementById('pass-word')
     var auth = firebase.auth()
 
     auth.onAuthStateChanged(function (firebaseUser) {
 
+        console.log("validateSignin... onAuthStateChanged executing...")
         if (firebaseUser) {
-
-            var userref = database.ref('users/'+firebaseUser.uid)
-
-            userref.on('value', function(snap){
-                user = snap.val()
-                console.log(user.email + USER_SIGNED_IN_MESSAGE)
-                onSuccess()
-             })
-
-
+            console.log(USER_SIGNED_IN_MESSAGE)
+            model.SignedIn(true)
         }
         else {
             console.log(USER_SIGNED_OUT_MESSAGE)
             model.SignedIn(false)
         }
+
+        console.log("Finished executing validateSigning...onAuthStateChanged")
     })
 
     var promise = auth.signInWithEmailAndPassword(txtEmail.value, txtPassword.value)
         
-    promise.catch(function (e) {
+    promise.then(function (firebaseUser) {
+
+
+        if (firebaseUser) {
+
+            var userref = database.ref('users/' + firebaseUser.uid)
+
+            userref.on('value', function (snap) {
+                user = snap.val()
+                console.log("user = snap.val()")
+                console.log(user)
+                console.log(user.email + USER_SIGNED_IN_MESSAGE)
+                model.SignedIn(true)
+                onSuccess()
+            })
+        }
+        else {
+            console.log(USER_SIGNED_OUT_MESSAGE)
+            model.SignedIn(false)
+        }
+
+    }).catch(function (e) {
         console.log(e.message)
     })
 }
@@ -190,19 +193,24 @@ function addCreateAccountEvents(onSuccess) {
         //TODO: validate email and password
         var txtEmail = document.getElementById('new-email')
         var txtPassword = document.getElementById('new-password')
-        var txtFirstName = document.getElementById('firstname')
-        var txtLastName = document.getElementById('lastname')
+        var txtFirstName = document.getElementById('first-name')
+        var txtLastName = document.getElementById('last-name')
 
 
         var auth = firebase.auth()
         auth.onAuthStateChanged(function (firebaseUser) {
+            console.log("onAUthStateChnaged executing...")
+
             if (firebaseUser) {
                 console.log(USER_SIGNED_IN_MESSAGE)
+                model.SignedIn(true)
             }
             else {
                 console.log(USER_SIGNED_OUT_MESSAGE)
                 model.SignedIn(false)
             }
+
+            console.log("onAUthStateChnaged finished...")
         })
 
         var promise = auth.createUserWithEmailAndPassword(txtEmail.value, txtPassword.value)
@@ -227,7 +235,7 @@ function addCreateAccountEvents(onSuccess) {
             users.child(firebaseUser.uid).set(user)
             Materialize.toast("Account successfuly created", 2000)
             Materialize.toast("You are now signed in", 2000)
-
+            model.SignedIn(true)
             onSuccess()
         })
         .catch(function (e) {
