@@ -162,10 +162,6 @@ function validateSignIn(onSuccess){
 
             userref.on('value', function(snap){
                 user = snap.val()
-
-                console.log(firebaseUser)
-                console.log(userref)
-                console.log(user)
                 console.log(user.email + USER_SIGNED_IN_MESSAGE)
                 onSuccess()
              })
@@ -201,26 +197,7 @@ function addCreateAccountEvents(onSuccess) {
         var auth = firebase.auth()
         auth.onAuthStateChanged(function (firebaseUser) {
             if (firebaseUser) {
-                user = {
-                    email: firebaseUser.email,
-                    firstName: txtFirstName.value,
-                    lastName: txtLastName.value,
-                    displayName: txtFirstName.value + '.' + txtLastName.value,
-                    uid: firebaseUser.uid
-                }
-
-                console.log(user)
-                console.log(user.email + USER_SIGNED_IN_MESSAGE)
-
-                //This code sets the id (key) of user to the firebaseuserid
-                //Instead of using push we use set so that we can have control over
-                //the key.
-                var users = database.ref('users')
-                users.child(firebaseUser.uid).set(user)
-                Materialize.toast("Account successfuly created", 2000)
-                Materialize.toast("You are now signed in", 2000)
-
-                onSuccess()
+                console.log(USER_SIGNED_IN_MESSAGE)
             }
             else {
                 console.log(USER_SIGNED_OUT_MESSAGE)
@@ -230,7 +207,31 @@ function addCreateAccountEvents(onSuccess) {
 
         var promise = auth.createUserWithEmailAndPassword(txtEmail.value, txtPassword.value)
 
-        promise.catch(function (e) {
+        promise.then(function (firebaseUser) {
+            console.log("Then executing....")
+            user = {
+                email: firebaseUser.email,
+                firstName: txtFirstName.value,
+                lastName: txtLastName.value,
+                displayName: txtFirstName.value + '.' + txtLastName.value,
+                uid: firebaseUser.uid
+            }
+
+            console.log(user)
+            console.log(user.email + USER_SIGNED_IN_MESSAGE)
+
+            //This code sets the id (key) of user to the firebaseuserid
+            //Instead of using push we use set so that we can have control over
+            //the key.
+            var users = database.ref('users')
+            users.child(firebaseUser.uid).set(user)
+            Materialize.toast("Account successfuly created", 2000)
+            Materialize.toast("You are now signed in", 2000)
+
+            onSuccess()
+        })
+        .catch(function (e) {
+            Materialize.toast("Failed to create account... " + e.message, 4000)
             console.log(e.message)
         })
     })
