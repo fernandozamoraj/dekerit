@@ -17,10 +17,14 @@ var model = {
     Message: ko.observable(""),
     changedView: function (x) {
         handleChangeView(x)
+    },
+    handleLogEntrySubmit: function () {
+        handleNewActivityEntry()
     }
 }
 
 function handleChangeView(x) {
+    console.log("Setting current view to " + x)
     model.CurrentView(x)
 }
 
@@ -86,22 +90,18 @@ function handleSignIn() {
     })
 
     $('#log-item').click(function () {
-        switchToLogEntry()
+        switchToLogEntry(true)
     })
-
-    
+        
     model.Title("log entry")
 
-    switchToLogEntry()
+    switchToLogEntry(false)
 }
 
-function switchToLogEntry() {
+function switchToLogEntry(bindSubmit) {
     handleChangeView("logitem")
     model.Message("")
     $('select').material_select();
-    $('#entry-submit').click(function () {
-        handleNewActivityEntry()
-    })
     bindLogEntries()
 }
 
@@ -124,8 +124,6 @@ $(document).ready(function () {
     })
 
     $('#sign-out').click(signoutToMain)
-
-
 
     bindCreateAccountScreen()
 
@@ -184,78 +182,82 @@ function validateSignIn(onSuccess){
     })
 }
 
-function addCreateAccountEvents(onSuccess) {
+function newTagIsValid(tag, onSuccess, onError) {
 
-    var btnCreateAccount = document.getElementById('create-account')
+    var userTagRef = database.ref('user_tags/' + tag)
+    var existingTag = ''
 
-    btnCreateAccount.addEventListener('click', function (e) {
+    userTagRef.once('value', function (snap) {
+        console.log("key: " + snap.key)
+        console.log(snap.val())
 
-        //TODO: validate email and password
-        var txtEmail = document.getElementById('new-email')
-        var txtPassword = document.getElementById('new-password')
-        var txtFirstName = document.getElementById('first-name')
-        var txtLastName = document.getElementById('last-name')
-
-
-        var auth = firebase.auth()
-        auth.onAuthStateChanged(function (firebaseUser) {
-            console.log("onAUthStateChnaged executing...")
-
-            if (firebaseUser) {
-                console.log(USER_SIGNED_IN_MESSAGE)
-                model.SignedIn(true)
-            }
-            else {
-                console.log(USER_SIGNED_OUT_MESSAGE)
-                model.SignedIn(false)
-            }
-
-            console.log("onAUthStateChnaged finished...")
-        })
-
-        var promise = auth.createUserWithEmailAndPassword(txtEmail.value, txtPassword.value)
-
-        promise.then(function (firebaseUser) {
-            console.log("Then executing....")
-            user = {
-                email: firebaseUser.email,
-                firstName: txtFirstName.value,
-                lastName: txtLastName.value,
-                displayName: txtFirstName.value + '.' + txtLastName.value,
-                uid: firebaseUser.uid
-            }
-
-            console.log(user)
-            console.log(user.email + USER_SIGNED_IN_MESSAGE)
-
-            //This code sets the id (key) of user to the firebaseuserid
-            //Instead of using push we use set so that we can have control over
-            //the key.
-            var users = database.ref('users')
-            users.child(firebaseUser.uid).set(user)
-            Materialize.toast("Account successfuly created", 2000)
-            Materialize.toast("You are now signed in", 2000)
-            model.SignedIn(true)
+        if (snap.val()) {
+            onError()
+        }
+        else {
             onSuccess()
-        })
-        .catch(function (e) {
-            Materialize.toast("Failed to create account... " + e.message, 4000)
-            console.log(e.message)
-        })
+        }
     })
 }
 
-function getDateString(pastDate) {
+//**********************************
+//
+//  Utilities for validating input
+//
+//**********************************
+function getValue(id) {
+    var inputEl = document.getElementById(id)
+
+    return inputEl.value
+}
+
+function isEmpty(id) {
+    var val = getValue(id)
+
+    var returnVal = val || ""
+
+    console.log("id: " + id + " " + returnVal)
+
+    return !(returnVal)
+}
+
+function clearInputValidity(id) {
+    setValidtiy(id, '')
+}
+
+function setValidtiy(id, errorMsg) {
+    var inputEl = document.getElementById(id)
+
+    inputEl.setCustomValidity(errorMsg)
+}
+
+function getHowLongAgoItHappenedFromRightNowAsFriendlyString(pastDate) {
 
     var d = new Date();
     var currentTime = d.getTime()
     var diff = currentTime - pastDate
 
+    var seconds = Math.floor(diff / 1000)
     var minutes = Math.floor((diff / 1000) / 60)
     var hours = Math.floor(minutes / 60)
     var days = Math.floor(hours / 24)
+    var months = Math.floor(days / 30)
+    var years = Math.floor(days / 365)
+
     var returnVal = ''
-    if (days > 0) {
+
+    if (years > 0) {
+        returnVal = years + " years ago"
+        if (years == 1) {
+            returnVal = years + " year ago"
+        }
+    }
+    else if (months > 0) {
+        returnVal = months + " months ago"
+        if (months == 1) {
+            returnVal = months + " month ago"
+        }
+    } else if (days > 0) {
         returnVal = days + " days ago"
         if (days == 1) {
             returnVal = days + " day ago"
@@ -274,10 +276,150 @@ function getDateString(pastDate) {
             returnVal = minutes + " minute ago"
         }
     }
-
+    else if (seconds > 0) {
+        returnVal = seconds + " seconds ago"
+        if (seconds == 1) {
+            returnVal = seconds + " second ago"
+        }
+    }
+    else {
+        returnVal = "Just now"
+    }
 
     return returnVal
 }
+
+//************************END OF UTILITIES ***********************
+
+function validateDataEntered() {
+
+    clearInputValidity('user-tag')
+    clearInputValidity('first-name')
+    clearInputValidity('last-name')
+    clearInputValidity('new-password')
+    clearInputValidity('new-email')
+    clearInputValidity('v-new-email')
+
+    
+    if (isEmpty('user-tag')) {
+        return { valid: false, id: 'user-tag', msg: 'User tag is required' }
+    }
+    else if (isEmpty('first-name')) {
+        return { valid: false, id: 'first-name', msg: 'First name is required' }
+    }
+    else if (isEmpty('last-name')) {
+        return { valid: false, id: 'last-name', msg: 'Last name is required' }
+    }
+    else if (isEmpty('new-email')) {
+        return { valid: false, id: 'new-email', msg: 'E-Mail is required' }
+    }
+    else if (isEmpty('v-new-email')) {
+        return { valid: false, id: 'v-new-email', msg: 'Verification E-Mail is required' }
+    }
+    else if (isEmpty('new-password')) {
+        return { valid: false, id: 'new-pasword', msg: 'Password is required' }
+    }
+    else if (getValue('new-email') != getValue('v-new-email')) {
+        return { valid: false, id: 'v-new-email', msg: 'email and verification email must match' }
+    }
+
+    return {valid: true}
+}
+
+function addCreateAccountEvents(onSuccess) {
+
+    var btnCreateAccount = document.getElementById('create-account')
+
+    btnCreateAccount.addEventListener('click', function (e) {
+
+
+        var isValid = validateDataEntered();
+
+        if (isValid.valid === false) {
+            setValidtiy(isValid.id, isValid.msg)
+            return
+        }
+
+        //TODO: validate email and password
+        var email = getValue('new-email')
+        var password = getValue('new-password')
+        var firstname = getValue('first-name')
+        var lastname = getValue('last-name')
+        var usertag = getValue('user-tag')
+        
+        var auth = firebase.auth()
+        auth.onAuthStateChanged(function (firebaseUser) {
+            console.log("onAUthStateChnaged executing...")
+
+            if (firebaseUser) {
+                console.log(USER_SIGNED_IN_MESSAGE)
+                model.SignedIn(true)
+            }
+            else {
+                console.log(USER_SIGNED_OUT_MESSAGE)
+                model.SignedIn(false)
+            }
+
+            console.log("onAUthStateChnaged finished...")
+        })
+
+
+        //TODO: this validationg needs to be better structured
+        //actually this would be best tested live
+        newTagIsValid(
+            usertag,
+            createUser,
+            function () {
+                            
+                    Materialize.toast('user tag ' + usertag+ ' is already in use', 2000)
+            })
+
+
+        //this is set as a function in order to pass it in if user tag is valid
+        function createUser() {
+            var promise = auth.createUserWithEmailAndPassword(email, password)
+            var d = new Date()
+
+            promise.then(function (firebaseUser) {
+                console.log("Then executing....")
+                user = {
+                    email: firebaseUser.email,
+                    firstName: firstname,
+                    lastName: lastname,
+                    displayName: firstname+ '.' + lastname,
+                    uid: firebaseUser.uid,
+                    balance: 5000,
+                    joined: d.getTime(),
+                    userTag: usertag,
+                    email_verified: false
+                }
+
+                console.log(user)
+                console.log(user.email + USER_SIGNED_IN_MESSAGE)
+
+                //This code sets the id (key) of user to the firebaseuserid
+                //Instead of using push we use set so that we can have control over
+                //the key.
+                var users = database.ref('users')
+                users.child(firebaseUser.uid).set(user)
+
+                database.ref('user_tags/' + user.userTag).child('user_uid').set(user.uid)
+
+                Materialize.toast("Account successfuly created", 2000)
+                Materialize.toast("You are now signed in", 2000)
+                model.SignedIn(true)
+                onSuccess()
+            })
+            .catch(function (e) {
+                Materialize.toast("Failed to create account... " + e.message, 4000)
+                console.log(e.message)
+            })
+        }
+        
+    })
+}
+
+
 
 function bindLogEntries() {
     database.ref("log_entries").child(user.uid).on('value', function (snap) {
@@ -295,12 +437,16 @@ function bindLogEntries() {
 
         model.Feed([])
 
+        //the entries are the users own entries not the friends
         for (var i = 0; i < lastTwentyEntrys.length; i++) {
             model.Feed.push({
+                balance: lastTwentyEntrys[i].balance,
                 activity: lastTwentyEntrys[i].activity,
                 remarks: lastTwentyEntrys[i].remarks,
-                date: getDateString(lastTwentyEntrys[i].date),
+                points: lastTwentyEntrys[i].points,
+                date: getHowLongAgoItHappenedFromRightNowAsFriendlyString(lastTwentyEntrys[i].date),
                 displayName: user.displayName,
+                userTag: user.userTag
             });
         }
     })
@@ -312,15 +458,44 @@ function handleNewActivityEntry() {
     var d = new Date()
 
     var option = lb.options[lb.selectedIndex].text;
+    var optionVal = lb.options[lb.selectedIndex].value
+
+    var entryScore = optionVal > 1000 ? 20 : -20
+    
+
+
+    var userref = database.ref('users/' + user.uid)
+
+    var currentPoints = user['balance'] || 5000
+    var newBalance = currentPoints + entryScore
+
+    userref.child('balance').set(newBalance)
 
     //time is in milliseconds since 1970/01/01... perfect for sorting activities
 
+    //
+    //Entry will look like this in the database
+    //
+    // log_entries
+    //        -KtvsfI923234... (uid)
+    //                    - 1503886666796 (datetime fro Date.getTime as milliseconds from 1/1/1970)
+    //                            -uid
+    //                            -activity
+    //                            -remarks
+    //                            -date
+    //                            - -20   (-20 or 20 depending on entry)
     database.ref("log_entries").child(user.uid).child(d.getTime()).set({
         uid: user.uid,
         activity: option,
         remarks: txtRemarks.value,
-        date: d.getTime() 
+        date: d.getTime(),
+        points: entryScore,
+        balance: newBalance
     })
+    
+    txtRemarks.value = ""
+
+    Materialize.toast("Your entry has been logged!", 3000)
 }
 
 

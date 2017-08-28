@@ -2,24 +2,30 @@
 
 <div class="row">
 
-    <form class="col s12 m9">
+    <div class="col s12 m9">
         <div class="row">
             <div class="onehd">
                 <div class="input-field col s12">
                     <select id="entry-options">
                         <optgroup label="Ls">
                             <option value="1">Over-ate</option>
-                            <option value="2">Junky Food</option>
+                            <option value="2">Junk Food</option>
                             <option value="3">Fast Food</option>
                             <option value="4">Sugary Drink</option>
+                            <option value="5">Empty Calory Snack</option>
+                            <option value="6">Processed Food</option>
+                            <option value="5">Other (Bad) - Describe in remarks</option>
+
                         </optgroup>
                         <optgroup label="Ws">
-                            <option value="20">20 Minute Workout</option>
-                            <option value="21">Weight Workout</option>
-                            <option value="22">Bike ride</option>
-                            <option value="23">Extranous Labor</option>
-                            <option value="23">Healthy Snack</option>
-                            <option value="23">Healthy Meal</option>
+                            <option value="1001">20 Minute Workout</option>
+                            <option value="1002">20 Minute Walk</option>
+                            <option value="1004">Weight Workout</option>
+                            <option value="1004">Bike ride</option>
+                            <option value="1005">Extranous Labor</option>
+                            <option value="1006">Healthy Snack</option>
+                            <option value="1007">Healthy Meal</option>
+                            <option value="1008">Other (Good) - Describe in remarks</option>
                         </optgroup>
                     </select>
                     <label>Activities</label>
@@ -36,26 +42,32 @@
         </div>
         <div class="row">
             <div class="onehd col s12">
-                <a href="#" class="waves-effect waves-light btn teal darken-3" id="entry-submit">
+                <button class="waves-effect waves-light btn teal darken-3" id="entry-submit" data-bind="click: handleLogEntrySubmit">
                     <i class="material-icons left">edit</i>Submit
-                </a>
+                </button>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 <div class="row">
     <div class="col s12 m9">
         <ul class="collection" data-bind="foreach: Feed">
             <li class="collection-item avatar">
                 <i class="material-icons circle">person</i>
-                <span class="title" data-bind="text: displayName"></span>
+                <span class="title" data-bind="text: displayName"></span> ...<span data-bind="text: date"></span>
                 <p>
-                    <span data-bind="text: activity"></span><br>
-                    <span data-bind="text: remarks"></span><br>
-                    <span data-bind="text: date"></span>
+                    Activity: <span data-bind="text: activity"></span><br>
+                    Remarks: <span data-bind="text: remarks"></span><br>
+                    Points: <span data-bind="text: points"></span><br>                  
+                    Balance: <span data-bind="text: balance"></span>
                 </p>
                 <!--Put if to put the right icon depending on if it's positivie or negative-->
-                <a href="#!" class="secondary-content"><i class="material-icons icon-red">error_outline</i></a>
+                <!-- ko if: points < 0-->
+                <a href="#!" class="secondary-content"><i class="material-icons icon-red">sentiment_very_dissatisfied</i></a>
+                <!-- /ko-->
+                <!-- ko if: points > 0-->
+                <a href="#!" class="secondary-content"><i class="material-icons icon-red">grade</i></a>
+                <!-- /ko-->
             </li>
         </ul>
     </div>
