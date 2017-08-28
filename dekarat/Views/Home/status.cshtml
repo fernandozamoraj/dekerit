@@ -4,10 +4,10 @@
         <ul class="collection">
             <li class="collection-item avatar">
                 <i class="material-icons circle blue darken-2">person</i>
-                <span class="title" data-bind="text: model.user.email"></span>
+                <span class="title" data-bind="text: model.User().displayName"></span>
                 <p>
                     Joined: <br>
-                    8/1/2017
+                    <span data-bind="text: model.User().joined_date"></span>
                 </p>
                 <a href="#!" class="secondary-content"><i class="material-icons icon-yellow">grade</i></a>
             </li>
@@ -15,25 +15,25 @@
                 <i class="material-icons circle yellow darken-2">folder</i>
                 <span class="title">Balance</span>
                 <p>
-                    1000 <br>
-                    Earned this week: 100
+                    <span data-bind="text: model.User().balance"></span><br>
+                    Earned this week: 100 (TODO)
                 </p>
                 <a href="#!" class="secondary-content"><i class="material-icons icon-yellow">grade</i></a>
             </li>
             <li class="collection-item avatar">
                 <i class="material-icons circle green darken-2">insert_chart</i>
-                <span class="title">Title</span>
+                <span class="title">User Tag</span>
                 <p>
-                    First Line <br>
-                    Second Line
+                    <span data-bind="text: model.User().userTag"></span><br>
+                    
                 </p>
                 <a href="#!" class="secondary-content"><i class="material-icons icon-yellow">grade</i></a>
             </li>
             <li class="collection-item avatar">
                 <i class="material-icons circle purple darken-2">play_arrow</i>
-                <span class="title">Title</span>
+                <span class="title">Friends</span>
                 <p>
-                    First Line <br>
+                    300 (TODO) <br>
                     Second Line
                 </p>
                 <a href="#!" class="secondary-content"><i class="material-icons icon-yellow">grade</i></a>

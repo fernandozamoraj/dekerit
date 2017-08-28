@@ -11,6 +11,7 @@ function getTextValue(inputId) {
 //*****************end of setup firebase
 var model = {
     Feed: ko.observableArray(),
+    User: ko.observable(),
     CurrentView: ko.observable("main"),
     SignedIn: ko.observable(false),
     Title: ko.observable("dekarat"),
@@ -163,8 +164,10 @@ function validateSignIn(onSuccess){
 
             var userref = database.ref('users/' + firebaseUser.uid)
 
-            userref.on('value', function (snap) {
+            userref.on('value', function (snap) {                
                 user = snap.val()
+                user.joined_date = getHowLongAgoItHappenedFromRightNowAsFriendlyString( snap.joined )
+                model.User(user)
                 console.log("user = snap.val()")
                 console.log(user)
                 console.log(user.email + USER_SIGNED_IN_MESSAGE)
