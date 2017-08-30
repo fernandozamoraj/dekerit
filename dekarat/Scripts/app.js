@@ -2,6 +2,7 @@
 var USER_SIGNED_OUT_MESSAGE = 'user signed out or failed to sign in...'
 var USER_SIGNED_IN_MESSAGE = ' user signed in...'
 var user;
+const TABLE_LOG_ENTRIES = "log_entries"
 
 function getTextValue(inputId) {
     var element = document.getElementById(inputId)
@@ -9,20 +10,36 @@ function getTextValue(inputId) {
 }
 
 //*****************end of setup firebase
-var model = {
-    Feed: ko.observableArray(),
-    User: ko.observable(),
-    CurrentView: ko.observable("main"),
-    SignedIn: ko.observable(false),
-    Title: ko.observable("dekarat"),
-    Message: ko.observable(""),
-    changedView: function (x) {
+var model;
+
+function MyModel(){
+    var self = this;
+
+    self.Feed = ko.observableArray();
+    self.User = ko.observable();
+    self.CurrentView = ko.observable("main");
+    self.SignedIn = ko.observable(false);
+    self.Title = ko.observable("dekarat");
+    self.Message = ko.observable("");
+    self.changedView = function (x) {
         handleChangeView(x)
-    },
-    handleLogEntrySubmit: function () {
+    };
+    self.handleLogEntrySubmit = function () {
         handleNewActivityEntry()
     }
+    self.deleteEntry = function (feedEntry) {
+        console.log("deleting entry " + " " + feedEntry.activity + " " + feedEntry.remarks)
+
+        //This should be transactional but... I am not sure
+        //that transactions are even possible on firebase
+        //give back the points whether positive or negative
+        updateUserBalance(feedEntry.points * (-1))
+        var refEntry = database.ref(TABLE_LOG_ENTRIES).child(feedEntry.uid).child(feedEntry.id);
+        refEntry.remove()
+    }
 }
+
+model = new MyModel()
 
 function handleChangeView(x) {
     console.log("Setting current view to " + x)
@@ -164,9 +181,10 @@ function validateSignIn(onSuccess){
 
             var userref = database.ref('users/' + firebaseUser.uid)
 
-            userref.on('value', function (snap) {                
+            userref.on('value', function (snap) {
+                console.log("gettting user data...")
                 user = snap.val()
-                user.joined_date = getHowLongAgoItHappenedFromRightNowAsFriendlyString( snap.joined )
+                user.joined_date = getHowLongAgoItHappenedFromRightNowAsFriendlyString( user.joined )
                 model.User(user)
                 console.log("user = snap.val()")
                 console.log(user)
@@ -246,6 +264,8 @@ function getHowLongAgoItHappenedFromRightNowAsFriendlyString(pastDate) {
     var days = Math.floor(hours / 24)
     var months = Math.floor(days / 30)
     var years = Math.floor(days / 365)
+
+    console.log("diff: " + diff)
 
     var returnVal = ''
 
@@ -425,7 +445,7 @@ function addCreateAccountEvents(onSuccess) {
 
 
 function bindLogEntries() {
-    database.ref("log_entries").child(user.uid).on('value', function (snap) {
+    database.ref(TABLE_LOG_ENTRIES).child(user.uid).on('value', function (snap) {
         
         console.log("Binding log entries...")
         console.log(snap.val())
@@ -436,6 +456,8 @@ function bindLogEntries() {
             }
 
             lastTwentyEntrys.unshift(x.val())
+            lastTwentyEntrys[0].id = x.key
+
         })
 
         model.Feed([])
@@ -443,6 +465,8 @@ function bindLogEntries() {
         //the entries are the users own entries not the friends
         for (var i = 0; i < lastTwentyEntrys.length; i++) {
             model.Feed.push({
+                id: lastTwentyEntrys[i].id,
+                uid: lastTwentyEntrys[i].uid,
                 balance: lastTwentyEntrys[i].balance,
                 activity: lastTwentyEntrys[i].activity,
                 remarks: lastTwentyEntrys[i].remarks,
@@ -455,6 +479,15 @@ function bindLogEntries() {
     })
 }
 
+function updateUserBalance(additionalPoints) {
+    var userref = database.ref('users/' + user.uid)
+
+    var currentPoints = user['balance'] || 5000
+    var newBalance = currentPoints + additionalPoints
+
+    userref.child('balance').set(newBalance)
+}
+
 function handleNewActivityEntry() {
     var txtRemarks = document.getElementById('entry-remarks')
     var lb = document.getElementById('entry-options')
@@ -464,15 +497,8 @@ function handleNewActivityEntry() {
     var optionVal = lb.options[lb.selectedIndex].value
 
     var entryScore = optionVal > 1000 ? 20 : -20
-    
 
-
-    var userref = database.ref('users/' + user.uid)
-
-    var currentPoints = user['balance'] || 5000
-    var newBalance = currentPoints + entryScore
-
-    userref.child('balance').set(newBalance)
+    updateUserBalance(entryScore)
 
     //time is in milliseconds since 1970/01/01... perfect for sorting activities
 
@@ -487,7 +513,9 @@ function handleNewActivityEntry() {
     //                            -remarks
     //                            -date
     //                            - -20   (-20 or 20 depending on entry)
-    database.ref("log_entries").child(user.uid).child(d.getTime()).set({
+    var entryId = d.getTime()
+
+    database.ref(TABLE_LOG_ENTRIES).child(user.uid).child(entryId).set({
         uid: user.uid,
         activity: option,
         remarks: txtRemarks.value,

@@ -59,14 +59,15 @@
                     Activity: <span data-bind="text: activity"></span><br>
                     Remarks: <span data-bind="text: remarks"></span><br>
                     Points: <span data-bind="text: points"></span><br>                  
-                    Balance: <span data-bind="text: balance"></span>
+                    Balance: <span data-bind="text: balance"></span><br>
+                        <a class="btn-flat btn-large white"  data-bind="click: $parent.deleteEntry"><i class="material-icons icon-red">cancel</i></a>
                 </p>
                 <!--Put if to put the right icon depending on if it's positivie or negative-->
                 <!-- ko if: points < 0-->
-                <a href="#!" class="secondary-content"><i class="material-icons icon-red">sentiment_very_dissatisfied</i></a>
+                <a href="#!" class="secondary-content"><i class="material-icons icon-black">thumb_down</i></a>
                 <!-- /ko-->
                 <!-- ko if: points > 0-->
-                <a href="#!" class="secondary-content"><i class="material-icons icon-red">grade</i></a>
+                <a href="#!" class="secondary-content"><i class="material-icons icon-black">fitness_center</i></a>
                 <!-- /ko-->
             </li>
         </ul>
