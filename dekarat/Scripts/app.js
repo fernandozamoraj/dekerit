@@ -259,7 +259,10 @@ function clearInputValidity(id) {
 function setValidtiy(id, errorMsg) {
     var inputEl = document.getElementById(id)
 
-    inputEl.setCustomValidity(errorMsg)
+    console.log("Element id " + id)
+    
+    //TODO: we will add better validation later... for now this will do
+    Materialize.toast(errorMsg, 3000, 'red')
 }
 
 function getHowLongAgoItHappenedFromRightNowAsFriendlyString(pastDate) {
