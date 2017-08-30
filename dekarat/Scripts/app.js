@@ -1,8 +1,18 @@
 ﻿
-var USER_SIGNED_OUT_MESSAGE = 'user signed out or failed to sign in...'
-var USER_SIGNED_IN_MESSAGE = ' user signed in...'
-var user;
+const USER_SIGNED_OUT_MESSAGE = 'user signed out or failed to sign in...'
+const USER_SIGNED_IN_MESSAGE = ' user signed in...'
+let user = {};
 const TABLE_LOG_ENTRIES = "log_entries"
+let DEBUG = true
+
+let LOG = function (x) {
+    if (DEBUG) {
+        if (console) {
+            console.log(x)
+        }
+    }
+}
+
 
 function getTextValue(inputId) {
     var element = document.getElementById(inputId)
@@ -28,7 +38,7 @@ function MyModel(){
         handleNewActivityEntry()
     }
     self.deleteEntry = function (feedEntry) {
-        console.log("deleting entry " + " " + feedEntry.activity + " " + feedEntry.remarks)
+        LOG("deleting entry " + " " + feedEntry.activity + " " + feedEntry.remarks)
 
         //This should be transactional but... I am not sure
         //that transactions are even possible on firebase
@@ -42,15 +52,15 @@ function MyModel(){
 model = new MyModel()
 
 function handleChangeView(x) {
-    console.log("Setting current view to " + x)
+    LOG("Setting current view to " + x)
     model.CurrentView(x)
 }
 
 function handleSignOut() {
 
-    console.log("Handling signout....")
-    console.log(model)
-    console.log(user)
+    LOG("Handling signout....")
+    LOG(model)
+    LOG(user)
     if (model.SignedIn() === true) {
 
         
@@ -59,7 +69,7 @@ function handleSignOut() {
         Materialize.toast($toastContent, 4000);
 
         firebase.auth().signOut().then(function () {
-            console.log(USER_SIGNED_OUT_MESSAGE)
+            LOG(USER_SIGNED_OUT_MESSAGE)
         })
     }
 }
@@ -67,11 +77,11 @@ function handleSignOut() {
 function bindCreateAccountScreen() {
 
     $('#create-account-screen').click(function () {
-        console.log("cas 1")
+        LOG("cas 1")
         handleSignOut()
-        console.log("cas 2")
+        LOG("cas 2")
         handleChangeView("createaccount")
-        console.log("cas 3")
+        LOG("cas 3")
         addCreateAccountEvents(handleSignIn)
 
     })
@@ -159,17 +169,17 @@ function validateSignIn(onSuccess){
 
     auth.onAuthStateChanged(function (firebaseUser) {
 
-        console.log("validateSignin... onAuthStateChanged executing...")
+        LOG("validateSignin... onAuthStateChanged executing...")
         if (firebaseUser) {
-            console.log(USER_SIGNED_IN_MESSAGE)
+            LOG(USER_SIGNED_IN_MESSAGE)
             model.SignedIn(true)
         }
         else {
-            console.log(USER_SIGNED_OUT_MESSAGE)
+            LOG(USER_SIGNED_OUT_MESSAGE)
             model.SignedIn(false)
         }
 
-        console.log("Finished executing validateSigning...onAuthStateChanged")
+        LOG("Finished executing validateSigning...onAuthStateChanged")
     })
 
     var promise = auth.signInWithEmailAndPassword(txtEmail.value, txtPassword.value)
@@ -182,24 +192,24 @@ function validateSignIn(onSuccess){
             var userref = database.ref('users/' + firebaseUser.uid)
 
             userref.on('value', function (snap) {
-                console.log("gettting user data...")
+                LOG("gettting user data...")
                 user = snap.val()
                 user.joined_date = getHowLongAgoItHappenedFromRightNowAsFriendlyString( user.joined )
                 model.User(user)
-                console.log("user = snap.val()")
-                console.log(user)
-                console.log(user.email + USER_SIGNED_IN_MESSAGE)
+                LOG("user = snap.val()")
+                LOG(user)
+                LOG(user.email + USER_SIGNED_IN_MESSAGE)
                 model.SignedIn(true)
                 onSuccess()
             })
         }
         else {
-            console.log(USER_SIGNED_OUT_MESSAGE)
+            LOG(USER_SIGNED_OUT_MESSAGE)
             model.SignedIn(false)
         }
 
     }).catch(function (e) {
-        console.log(e.message)
+        LOG(e.message)
     })
 }
 
@@ -209,8 +219,8 @@ function newTagIsValid(tag, onSuccess, onError) {
     var existingTag = ''
 
     userTagRef.once('value', function (snap) {
-        console.log("key: " + snap.key)
-        console.log(snap.val())
+        LOG("key: " + snap.key)
+        LOG(snap.val())
 
         if (snap.val()) {
             onError()
@@ -237,7 +247,7 @@ function isEmpty(id) {
 
     var returnVal = val || ""
 
-    console.log("id: " + id + " " + returnVal)
+    LOG("id: " + id + " " + returnVal)
 
     return !(returnVal)
 }
@@ -265,7 +275,7 @@ function getHowLongAgoItHappenedFromRightNowAsFriendlyString(pastDate) {
     var months = Math.floor(days / 30)
     var years = Math.floor(days / 365)
 
-    console.log("diff: " + diff)
+    LOG("diff: " + diff)
 
     var returnVal = ''
 
@@ -372,18 +382,18 @@ function addCreateAccountEvents(onSuccess) {
         
         var auth = firebase.auth()
         auth.onAuthStateChanged(function (firebaseUser) {
-            console.log("onAUthStateChnaged executing...")
+            LOG("onAUthStateChnaged executing...")
 
             if (firebaseUser) {
-                console.log(USER_SIGNED_IN_MESSAGE)
+                LOG(USER_SIGNED_IN_MESSAGE)
                 model.SignedIn(true)
             }
             else {
-                console.log(USER_SIGNED_OUT_MESSAGE)
+                LOG(USER_SIGNED_OUT_MESSAGE)
                 model.SignedIn(false)
             }
 
-            console.log("onAUthStateChnaged finished...")
+            LOG("onAUthStateChnaged finished...")
         })
 
 
@@ -404,7 +414,7 @@ function addCreateAccountEvents(onSuccess) {
             var d = new Date()
 
             promise.then(function (firebaseUser) {
-                console.log("Then executing....")
+                LOG("Then executing....")
                 user = {
                     email: firebaseUser.email,
                     firstName: firstname,
@@ -417,8 +427,8 @@ function addCreateAccountEvents(onSuccess) {
                     email_verified: false
                 }
 
-                console.log(user)
-                console.log(user.email + USER_SIGNED_IN_MESSAGE)
+                LOG(user)
+                LOG(user.email + USER_SIGNED_IN_MESSAGE)
 
                 //This code sets the id (key) of user to the firebaseuserid
                 //Instead of using push we use set so that we can have control over
@@ -435,7 +445,7 @@ function addCreateAccountEvents(onSuccess) {
             })
             .catch(function (e) {
                 Materialize.toast("Failed to create account... " + e.message, 4000)
-                console.log(e.message)
+                LOG(e.message)
             })
         }
         
@@ -447,8 +457,8 @@ function addCreateAccountEvents(onSuccess) {
 function bindLogEntries() {
     database.ref(TABLE_LOG_ENTRIES).child(user.uid).on('value', function (snap) {
         
-        console.log("Binding log entries...")
-        console.log(snap.val())
+        LOG("Binding log entries...")
+        LOG(snap.val())
         var lastTwentyEntrys = []
         snap.forEach(function (x) {
             if (lastTwentyEntrys.length > 20) {
@@ -481,11 +491,12 @@ function bindLogEntries() {
 
 function updateUserBalance(additionalPoints) {
     var userref = database.ref('users/' + user.uid)
-
     var currentPoints = user['balance'] || 5000
     var newBalance = currentPoints + additionalPoints
 
     userref.child('balance').set(newBalance)
+
+    return newBalance
 }
 
 function handleNewActivityEntry() {
@@ -498,7 +509,7 @@ function handleNewActivityEntry() {
 
     var entryScore = optionVal > 1000 ? 20 : -20
 
-    updateUserBalance(entryScore)
+    var newBalance = updateUserBalance(entryScore)
 
     //time is in milliseconds since 1970/01/01... perfect for sorting activities
 
