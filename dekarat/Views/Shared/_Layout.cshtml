@@ -35,6 +35,10 @@
         </nav>
     </header>
 
+    <!-- ko if: model.SignedIn() == true-->
+    @Html.Partial("menu")
+    <!-- /ko -->
+
     <div class="container">
 
 
