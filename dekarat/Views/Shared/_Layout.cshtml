@@ -49,7 +49,9 @@
                     </ul>
                     <ul id="nav-mobile" class="right">
                         <li class="hide-on-small-only"><a href="#"><i class="material-icons left">local_dining</i></a></li>
+                        <!-- ko if: model.SignedIn() == true-->
                         <li><a href="#" id="user-settings"><i class="material-icons right">settings</i></a></li>
+                        <!-- /ko-->
                     </ul>
                 </div>
             </nav>

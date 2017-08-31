@@ -151,8 +151,12 @@ function showAboutDialog() {
 
     setTimeout(function () {
         $('#about-dekarat-dialog').hide();
-    }, 3000)
+    }, 10000)
 
+}
+
+function closeAboutDialog() {
+    $('#about-dekarat-dialog').hide();
 }
 
 $(document).ready(function () {
@@ -169,6 +173,8 @@ $(document).ready(function () {
     $('#see-our-video').click(seeOurVideo)
     $('#see-our-tutorial').click(seeOurTutorial)
     $('#user-settings').click(showUserSettings)
+    $('#close-about').click(closeAboutDialog)
+
 
     bindCreateAccountScreen()
 
