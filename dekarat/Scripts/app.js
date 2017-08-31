@@ -144,6 +144,17 @@ function signoutToMain(){
     })
 }
 
+function showAboutDialog() {
+
+    LOG("Showing about dialog")
+    $('#about-dekarat-dialog').show();
+
+    setTimeout(function () {
+        $('#about-dekarat-dialog').hide();
+    }, 3000)
+
+}
+
 $(document).ready(function () {
 
     $('#sign-in').click(function () {
@@ -153,11 +164,29 @@ $(document).ready(function () {
 
     $('#sign-out').click(signoutToMain)
 
+    $('#about-dekarat-1').click(showAboutDialog)
+    $('#about-dekarat-2').click(showAboutDialog)
+    $('#see-our-video').click(seeOurVideo)
+    $('#see-our-tutorial').click(seeOurTutorial)
+    $('#user-settings').click(showUserSettings)
+
     bindCreateAccountScreen()
 
     model.CurrentView("main")
     ko.applyBindings(model)
 });
+
+function seeOurVideo() {
+    Materialize.toast("Our video is coming soon... please stay tuned....", 2000, 'blue')
+}
+
+function seeOurTutorial() {
+    Materialize.toast("Our tutorial video is coming soon... please stay tuned....", 2000, 'blue')
+}
+
+function showUserSettings() {
+    Materialize.toast("User settings coming soon... please stay tuned....", 2000, 'blue')
+}
 
 
 //TODO: check for real email
