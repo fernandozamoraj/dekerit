@@ -18,46 +18,51 @@
 </head>
 <body>
 
+
+    <header class="header">
+        <nav class="col s12 m9  teal darken-4 ">
+            <div class="nav-wrapper">
+                <a class="brand-logo center teal darken-4" data-bind="text: Title" id="about-dekarat-1"></a>
+                <ul id="nav-mobile" class="left">
+                    <li><a href="#"><i class="material-icons left">directions_run</i></a></li>
+                    <li class="hide-on-small-only"><a href="#"><i class="material-icons right">directions_bike</i></a></li>
+                </ul>
+                <ul id="nav-mobile" class="right">
+                    <li class="hide-on-small-only"><a href="#"><i class="material-icons left">local_dining</i></a></li>
+                    <li><a href="#" id="sign-out"><i class="material-icons right">power_settings_new</i></a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
     <div class="container">
 
-        <div class="row">
-            <nav class="col s12 m9  teal darken-4 ">
-                <div class="nav-wrapper">
-                    <a class="brand-logo center teal darken-4" data-bind="text: Title" id="about-dekarat-1"></a>
-                    <ul id="nav-mobile" class="left">
-                        <li><a href="#"><i class="material-icons left">directions_run</i></a></li>
-                        <li class="hide-on-small-only"><a href="#"><i class="material-icons right">directions_bike</i></a></li>
-                    </ul>
-                    <ul id="nav-mobile" class="right">
-                        <li class="hide-on-small-only"><a href="#"><i class="material-icons left">local_dining</i></a></li>
-                        <li><a href="#" id="sign-out"><i class="material-icons right">power_settings_new</i></a></li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
+
         
         
         @RenderBody()
-
-        <div class="row">
-            <nav class="col s12 m9  teal darken-4 ">
-                <div class="nav-wrapper">
-                    <a href="#" class="brand-logo center teal darken-4"></a>
-                    <ul id="nav-mobile" class="left">
-                        <li><a href="#" id="about-dekarat-2"><i class="material-icons left">info_outline</i></a></li>
-                        <li class="hide-on-small-only"><a href="#"><i class="material-icons right">directions_bike</i></a></li>
-                    </ul>
-                    <ul id="nav-mobile" class="right">
-                        <li class="hide-on-small-only"><a href="#"><i class="material-icons left">local_dining</i></a></li>
-                        <!-- ko if: model.SignedIn() == true-->
-                        <li><a href="#" id="user-settings"><i class="material-icons right">settings</i></a></li>
-                        <!-- /ko-->
-                    </ul>
-                </div>
-            </nav>
-        </div>
+  
 
     </div>
+
+
+    <footer class="footer">
+        <nav class="col s12   teal darken-4 ">
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo center teal darken-4"></a>
+                <ul id="nav-mobile" class="left">
+                    <li><a href="#" id="about-dekarat-2"><i class="material-icons left">info_outline</i></a></li>
+                    <li class="hide-on-small-only"><a href="#"><i class="material-icons right">directions_bike</i></a></li>
+                </ul>
+                <ul id="nav-mobile" class="right">
+                    <li class="hide-on-small-only"><a href="#"><i class="material-icons left">local_dining</i></a></li>
+                    <!-- ko if: model.SignedIn() == true-->
+                    <li><a href="#" id="user-settings"><i class="material-icons right">settings</i></a></li>
+                    <!-- /ko-->
+                </ul>
+            </div>
+        </nav>
+    </footer>    
 
     <!--script src="~/Scripts/jquery-1.10.2.min.js"></script-->
     <!--script src="~/Scripts/bootstrap.min.js"></script-->
