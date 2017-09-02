@@ -67,6 +67,15 @@ function MyModel(){
         var first
         var second
 
+        if (friend.uid == user.uid) {
+            Materialize.toast("Aww! Love it that you want to be your own friend!", 2000, "green")
+            return
+        }
+
+        //The concept of first and second is simply to enter records by sorted order.
+        //So for example user: AAAAAAA will be the parent record of BBBB because 
+        //alphabetically AAAAAAA comes before BBBB
+        //this way there is only ever one entry for any two friends
         if (friend.uid < user.uid) {
             first = friend.uid
             second = user.uid
@@ -84,7 +93,7 @@ function MyModel(){
 
             if (request) {
                 if (request.accepted) {
-                    Materialize.toast("This friend ship already exists.", 2000, 'red')
+                    Materialize.toast("This friendship already exists.", 2000, 'red')
                 }
                 else {
                     Materialize.toast("This friendship is already pending approval.", 2000, 'red')
