@@ -25,18 +25,23 @@ var model;
 function MyModel(){
     var self = this;
 
-    self.Feed = ko.observableArray();
-    self.User = ko.observable();
-    self.CurrentView = ko.observable("main");
-    self.SignedIn = ko.observable(false);
-    self.Title = ko.observable("dekarat");
-    self.Message = ko.observable("");
+    self.Feed = ko.observableArray()
+    self.User = ko.observable()
+    self.CurrentView = ko.observable("main")
+    self.SignedIn = ko.observable(false)
+    self.Title = ko.observable("dekarat")
+    self.Message = ko.observable("")
+    self.SearchEmail = ko.observable("")
+    self.SearchResults = ko.observableArray()
+
     self.changedView = function (x) {
         handleChangeView(x)
-    };
+    }
+
     self.handleLogEntrySubmit = function () {
         handleNewActivityEntry()
     }
+
     self.deleteEntry = function (feedEntry) {
         LOG("deleting entry " + " " + feedEntry.activity + " " + feedEntry.remarks)
 
@@ -46,6 +51,128 @@ function MyModel(){
         updateUserBalance(feedEntry.points * (-1))
         var refEntry = database.ref(TABLE_LOG_ENTRIES).child(feedEntry.uid).child(feedEntry.id);
         refEntry.remove()
+    }
+
+    self.addFriend = function () {
+        LOG("addFriend called....")
+        $('#add-friend-div').show()
+    }
+
+    self.requestFriendship = function (friend) {
+
+        LOG("requestFriendShip called...")
+
+
+
+        var first
+        var second
+
+        if (friend.uid < user.uid) {
+            first = friend.uid
+            second = user.uid
+        }
+        else {
+            first = user.uid
+            second = friend.uid
+        }
+
+        var friends = database.ref("friends").child(first);
+
+        friends.child(second).once('value', function (snap) {
+
+            var request = snap.val()
+
+            if (request) {
+                if (request.accepted) {
+                    Materialize.toast("This friend ship already exists.", 2000, 'red')
+                }
+                else {
+                    Materialize.toast("This friendship is already pending approval.", 2000, 'red')
+                }
+            }
+            else {
+                friends.child(second).child('accepted').set(false)
+                friends.child(second).child('requestor').set(user.uid)
+                Materialize.toast("Your request has been sent to " + friend.userTag, 2000, 'green')
+
+            }
+        })
+
+
+        setTimeout(function () {
+            $('#add-friend-div').hide()
+            self.SearchResults([])
+            self.SearchEmail("")
+            }, 1000)
+    }
+
+    function getFirstProp(obj) {
+        if (obj) {
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    return key
+                }
+            }
+        }
+
+        return null
+    }
+
+    self.search = function () {
+
+        LOG("search called....")
+        LOG("searching for " +self.SearchEmail())
+
+        const query = database.ref('users')
+                        .orderByChild('email')
+                        .equalTo(self.SearchEmail())
+                        .limitToFirst(1)
+
+        query.on('value', function(snap){
+  
+            var users = snap.val()
+
+            //users is the full table of users with each nested object by key
+            //in order to get the extract the object we must know it's name
+            //Since the name is the users id, which is a cryptic value
+            //we must extract it dynamically by getting the first property
+            //
+            //So if you have a return obje of users like this
+            //
+            //  {
+            //       osufoiUOFUsdfsodfjaosuf:{
+            //              uid: osufoiUOFUsdfsodfjaosuf,
+            //              email: 'somethin@yahoo.com',
+            ///             ....
+            //       }
+            // }
+            //
+            // you have to extract users.osufoiUOFUsdfsodfjaosuf
+            // but there is no way to know that name since it's a key
+            // so a way to extract it via reflection by getting the first property out
+            // of the root json object
+            var firstPropName = getFirstProp(users)
+            var resultUser = null
+
+            if (firstPropName) {
+                resultUser = users[getFirstProp(users)]
+            }
+
+            if (resultUser) {
+                resultUser.joined_date = getHowLongAgoItHappenedFromRightNowAsFriendlyString(resultUser.joined)
+
+                LOG("ResultUser:")
+                LOG(resultUser)
+                self.SearchResults.push(resultUser)
+            }
+            else {
+                Materialize.toast("No results found for email " + self.SearchEmail(), 2000, 'red')
+            }
+        })
+
+        //TODO - hard coded for testing with self user
+        
+
     }
 }
 
@@ -467,6 +594,8 @@ function addCreateAccountEvents(onSuccess) {
 
                 LOG(user)
                 LOG(user.email + USER_SIGNED_IN_MESSAGE)
+
+                model.User(user)
 
                 //This code sets the id (key) of user to the firebaseuserid
                 //Instead of using push we use set so that we can have control over

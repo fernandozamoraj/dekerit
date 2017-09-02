@@ -1,6 +1,6 @@
-﻿<div class="row">
+﻿<div class="row" id="add-friend-div">
     <div class="col s12 m9">
-        <form>
+        <div>
             <div class="row">
                 <div class="input-field col s12 onehd">
                     <input placeholder="friend's email" id="e-mail" type="email" class="validate">
@@ -15,7 +15,17 @@
                     </a>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
-
+    <ul class="collection" data-bind="foreach: searchResults" style="border: none;">
+        <li class="collection-item avatar grey lighten-4" style="margin: 5px; border-radius: 10px;">
+            <i class="material-icons circle">person</i>
+            <span class="bold" data-bind="text: userTag"></span><br />
+            <p>
+                <span class="teal-text lighten-3">Joined:</span> <span class="grey-text lighten-2" data-bind="text: joined_date"></span><br>
+            </p>
+            <a href="#!" class="secondary-content" data-bind="click: $parent.requestFriendship"><i class="material-icons icon-black">add</i></a>
+            
+        </li>
+    </ul>
 </div>
