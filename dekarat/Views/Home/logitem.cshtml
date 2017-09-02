@@ -1,53 +1,53 @@
 ﻿
 
-        <div class="row">
-            <div class="onehd">
-                <div class="input-field col s12">
-                    <select id="entry-options">
-                        <optgroup label="Ws">
-                            <option value="1001">20 Minute Workout</option>
-                            <option value="1002">20 Minute Walk</option>
-                            <option value="1004">Weight Workout</option>
-                            <option value="1004">Bike ride</option>
-                            <option value="1005">Extranous Labor</option>
-                            <option value="1006">Healthy Snack</option>
-                            <option value="1007">Healthy Meal</option>
-                            <option value="1008">Other (Good) - Describe in remarks</option>
-                        </optgroup>
-                        <optgroup label="Ls">
-                            <option value="1">Over-ate</option>
-                            <option value="2">Junk Food</option>
-                            <option value="3">Fast Food</option>
-                            <option value="4">Sugary Drink</option>
-                            <option value="5">Empty Calory Snack</option>
-                            <option value="6">Processed Food</option>
-                            <option value="5">Other (Bad) - Describe in remarks</option>
-                        </optgroup>
-                    </select>
-                    <label>Activities</label>
-                </div>
-            </div>
+<div class="row">
+    <div class="onehd">
+        <div class="input-field col s12">
+            <select id="entry-options">
+                <optgroup label="Ws">
+                    <option value="1001">20 Minute Workout</option>
+                    <option value="1002">20 Minute Walk</option>
+                    <option value="1004">Weight Workout</option>
+                    <option value="1004">Bike ride</option>
+                    <option value="1005">Extranous Labor</option>
+                    <option value="1006">Healthy Snack</option>
+                    <option value="1007">Healthy Meal</option>
+                    <option value="1008">Other (Good) - Describe in remarks</option>
+                </optgroup>
+                <optgroup label="Ls">
+                    <option value="1">Over-ate</option>
+                    <option value="2">Junk Food</option>
+                    <option value="3">Fast Food</option>
+                    <option value="4">Sugary Drink</option>
+                    <option value="5">Empty Calory Snack</option>
+                    <option value="6">Processed Food</option>
+                    <option value="5">Other (Bad) - Describe in remarks</option>
+                </optgroup>
+            </select>
+            <label>Activities</label>
         </div>
-        <div class="row">
-            <div class="onehd">
-                <div class="input-field col s12">
-                    <textarea id="entry-remarks" class="materialize-textarea"></textarea>
-                    <label for="textarea1">Remarks</label>
-                </div>
-            </div>
+    </div>
+</div>
+<div class="row">
+    <div class="onehd">
+        <div class="input-field col s12">
+            <textarea id="entry-remarks" class="materialize-textarea"></textarea>
+            <label for="textarea1">Remarks</label>
         </div>
-        <div class="row">
-            <div class="onehd col s12">
-                <button class="waves-effect waves-light btn teal darken-3" id="entry-submit" data-bind="click: handleLogEntrySubmit">
-                    <i class="material-icons left">edit</i>Submit
-                </button>
-            </div>
-        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="onehd col s12">
+        <button class="waves-effect waves-light btn teal darken-3" id="entry-submit" data-bind="click: handleLogEntrySubmit">
+            <i class="material-icons left">edit</i>Submit
+        </button>
+    </div>
+</div>
 
 <div class="row">
     <div class="col s12">
         <ul class="collection" data-bind="foreach: Feed" style="border: none;">
-            <li class="collection-item avatar grey lighten-4" style="margin: 5px; border-radius: 10px;">
+            <li class="collection-item avatar grey lighten-2" style="margin: 5px; border-radius: 10px;">
                 <i class="material-icons circle">person</i>
                 <span class="bold" data-bind="text: displayName"></span><br />
                 <span data-bind="text: date"></span>

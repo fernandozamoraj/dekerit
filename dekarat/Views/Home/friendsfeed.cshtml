@@ -1,29 +1,25 @@
 ﻿
 <!--LESSON - need to add app.js?v=1 to ref for js file otherwise chrom gets stuck on cached version of app.js-->
 <div id="add-friend-div" style="display: none;">
-    <div class="row">
-        <div class="col s12 m9">
-            <div>
-                <div class="row">
-                    <div class="input-field col s12 onehd">
-                        <input placeholder="friend's email" id="e-mail-search" type="email" class="validate" data-bind="value: SearchEmail">
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col s12 onehd">
-                        <button href="#" class="waves-effect waves-light btn teal darken-3" data-bind="click: search">
-                            <i class="material-icons left">search</i>
-                            Search
-                        </button>
-                    </div>
-                </div>
-            </div>
+    <div class="row">
+        <div class="input-field col s12 onehd">
+            <input placeholder="friend's email" id="e-mail-search" type="email" class="validate" data-bind="value: SearchEmail">
         </div>
     </div>
 
     <div class="row">
-        <div class="col s12 m9">
+        <div class="col s12">
+            <button href="#" class="waves-effect waves-light btn teal darken-3" data-bind="click: search">
+                <i class="material-icons left">search</i>
+                Search
+            </button>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col s12">
             <ul class="collection" data-bind="foreach: SearchResults" style="border: none;">
                 <li class="collection-item avatar grey lighten-4" style="margin: 5px; border-radius: 10px;">
                     <i class="material-icons circle">person</i>
@@ -42,7 +38,7 @@
 
 
 <div class="row">
-    <div class="col s12 m9 onehd">
+    <div class="col s12">
         <button class="waves-effect waves-light btn teal darken-3" id="add-friend" data-bind="click: addFriend">
             <i class="material-icons left">add</i>
             Add Friend
@@ -50,36 +46,39 @@
 
     </div>
 </div>
-<div class="row">
-    <div class="col s12 m9 onehd">
 
-        <ul class="collection">
-            <li class="collection-item avatar">
-                <i class="material-icons circle icon-blue">person</i>
-                <span class="title">John Doe</span>
+<div class="row">
+    <div class="col s12">
+        <ul class="collection" style="border: none;">
+            <li class="collection-item avatar grey lighten-2" style="margin: 5px; border-radius: 10px;">
+                <i class="material-icons circle">person</i>
+                <span class="bold">John Doe</span><br />
                 <p>
-                    Balance: 1000 <br>
-                    Earned this week: 100
+                    <span class="teal-text lighten-3">Joined:</span> <span class="grey-text lighten-2" >1 day ago</span><br>
+                    <span class="teal-text lighten-3">Balance:</span> <span class="grey-text lighten-2" >5600</span><br>
+                    <span class="teal-text lighten-3">Earnd this week:</span> <span class="grey-text lighten-2" >1000</span><br>
                 </p>
-                <a href="#!" class="secondary-content"><i class="material-icons icon-yellow">grade</i></a>
+                <a href="#!" class="secondary-content"><i class="material-icons icon-black">fitness_center</i></a>
             </li>
-            <li class="collection-item avatar">
-                <i class="material-icons circle icon-blue">person</i>
-                <span class="title">Jane Doe</span>
+            <li class="collection-item avatar grey lighten-2" style="margin: 5px; border-radius: 10px;">
+                <i class="material-icons circle">person</i>
+                <span class="bold">John Doe</span><br />
                 <p>
-                    Balance: 1320 <br>
-                    Earned this week: 80
+                    <span class="teal-text lighten-3">Joined:</span> <span class="grey-text lighten-2">1 day ago</span><br>
+                    <span class="teal-text lighten-3">Balance:</span> <span class="grey-text lighten-2">5600</span><br>
+                    <span class="teal-text lighten-3">Earnd this week:</span> <span class="grey-text lighten-2">1000</span><br>
                 </p>
-                <a href="#!" class="secondary-content"><i class="material-icons icon-yellow">grade</i></a>
+                <a href="#!" class="secondary-content"><i class="material-icons icon-black">fitness_center</i></a>
             </li>
-            <li class="collection-item avatar ">
-                <i class="material-icons circle icon-blue">person</i>
-                <span class="title">Mike Doe</span>
+            <li class="collection-item avatar grey lighten-2" style="margin: 5px; border-radius: 10px;">
+                <i class="material-icons circle">person</i>
+                <span class="bold">John Doe</span><br />
                 <p>
-                    Balance: 1100 <br>
-                    Earned this week: 50
+                    <span class="teal-text lighten-3">Joined:</span> <span class="grey-text lighten-2">1 day ago</span><br>
+                    <span class="teal-text lighten-3">Balance:</span> <span class="grey-text lighten-2">5600</span><br>
+                    <span class="teal-text lighten-3">Earnd this week:</span> <span class="grey-text lighten-2">1000</span><br>
                 </p>
-                <a href="#!" class="secondary-content"><i class="material-icons icon-yellow">grade</i></a>
+                <a href="#!" class="secondary-content"><i class="material-icons icon-black">fitness_center</i></a>
             </li>
         </ul>
     </div>

@@ -362,7 +362,7 @@ function validateSignIn(onSuccess){
 
             var userref = database.ref('users/' + firebaseUser.uid)
 
-            userref.on('value', function (snap) {
+            userref.once('value', function (snap) {
                 LOG("gettting user data...")
                 user = snap.val()
                 user.joined_date = getHowLongAgoItHappenedFromRightNowAsFriendlyString( user.joined )
@@ -424,10 +424,10 @@ function isEmpty(id) {
 }
 
 function clearInputValidity(id) {
-    setValidtiy(id, '')
+    setValidity(id, '')
 }
 
-function setValidtiy(id, errorMsg) {
+function setValidity(id, errorMsg) {
     var inputEl = document.getElementById(id)
 
     console.log("Element id " + id)
@@ -543,7 +543,7 @@ function addCreateAccountEvents(onSuccess) {
         var isValid = validateDataEntered();
 
         if (isValid.valid === false) {
-            setValidtiy(isValid.id, isValid.msg)
+            setValidity(isValid.id, isValid.msg)
             return
         }
 
