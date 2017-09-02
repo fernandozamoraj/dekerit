@@ -375,11 +375,13 @@ function validateSignIn(onSuccess){
             })
         }
         else {
+            Materialize.toast("Failed to log in with those credentials", 2000, 'red')
             LOG(USER_SIGNED_OUT_MESSAGE)
             model.SignedIn(false)
         }
 
     }).catch(function (e) {
+        Materialize.toast("Failed to log in... " + e.message, 2000, 'red')
         LOG(e.message)
     })
 }
