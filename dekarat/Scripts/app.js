@@ -19,6 +19,18 @@ function getTextValue(inputId) {
     return element.value
 }
 
+function getFirstProp(obj) {
+    if (obj) {
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                return key
+            }
+        }
+    }
+
+    return null
+}
+
 //*****************end of setup firebase
 var model;
 
@@ -33,7 +45,7 @@ function MyModel(){
     self.Message = ko.observable("")
     self.SearchEmail = ko.observable("")
     self.SearchResults = ko.observableArray()
-
+    
     self.changedView = function (x) {
         handleChangeView(x)
     }
@@ -61,8 +73,6 @@ function MyModel(){
     self.requestFriendship = function (friend) {
 
         LOG("requestFriendShip called...")
-
-
 
         var first
         var second
@@ -114,19 +124,7 @@ function MyModel(){
             self.SearchEmail("")
             }, 1000)
     }
-
-    function getFirstProp(obj) {
-        if (obj) {
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    return key
-                }
-            }
-        }
-
-        return null
-    }
-
+    
     self.search = function () {
 
         LOG("search called....")
@@ -178,10 +176,6 @@ function MyModel(){
                 Materialize.toast("No results found for email " + self.SearchEmail(), 2000, 'red')
             }
         })
-
-        //TODO - hard coded for testing with self user
-        
-
     }
 }
 
@@ -244,7 +238,7 @@ function handleSignIn() {
     $('#status').click(function () {
         handleChangeView("status")
         model.Message("")
-        model.Message("status")
+        model.Title("status")
     })
 
     $('#news').click(function () {
@@ -265,6 +259,7 @@ function handleSignIn() {
 function switchToLogEntry(bindSubmit) {
     handleChangeView("logitem")
     model.Message("")
+    model.Title("Log Item")
     $('select').material_select();
     bindLogEntries()
 }
@@ -625,12 +620,9 @@ function addCreateAccountEvents(onSuccess) {
                 Materialize.toast("Failed to create account... " + e.message, 4000)
                 LOG(e.message)
             })
-        }
-        
+        }        
     })
 }
-
-
 
 function bindLogEntries() {
     database.ref(TABLE_LOG_ENTRIES).child(user.uid).on('value', function (snap) {

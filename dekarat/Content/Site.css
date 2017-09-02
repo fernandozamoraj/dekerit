@@ -16,12 +16,32 @@
     }
 
 */
+
+.upper{
+    text-transform: uppercase;
+}
 .onehd > .btn{
     width: 100%;
 }
 
-.onhd > input{
+.onehd > input{
     width: 100%;
+}
+
+.onehd > button{
+    width: 100%;
+}
+
+.fifty > .btn{
+    width: 50%;
+}
+
+.fifty > input{
+    width: 50%;
+}
+
+.fifty > button{
+    width: 50%;
 }
 
 .sign-in{
