@@ -54,6 +54,8 @@ function MyModel(){
     self.FriendRequests = ko.observableArray([])
     self.FriendsFeed = ko.observableArray([])
     self.HasRequests = ko.observable(false)
+    self.Friends = ko.observableArray([])
+    self.FriendsCount = ko.observable(0)
     
     self.acceptFriendRequest = function (friendRequest) {
 
@@ -328,7 +330,15 @@ function setFriendsFeed() {
     getFriends(query, friends, function () {
         var query2 = database.ref('friends').orderByChild('requestor').equalTo(user.uid).limitToFirst(20)
         getFriends(query2, friends, function () {
-                getFriendsFeeds(friends, friendsFeeds)
+
+            //Get the actual friends for other purposes
+            //TODO: later we will need a list of all friends
+            for (var i = 0; i < friends.length; i++) {
+                model.Friends.push({ uid: friends[i] })
+            }
+            model.FriendsCount(friends.length)
+
+            getFriendsFeeds(friends, friendsFeeds)
         })
     })    
 }
