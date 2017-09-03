@@ -23,7 +23,7 @@
                         <span class="teal-text lighten-3">Joined:</span> <span class="grey-text lighten-2" data-bind="text: joined_date"></span><br>
                         <span class="teal-text lighten-3">Email:</span> <span class="grey-text lighten-2" data-bind="text: email"></span><br>
                     </p>
-                        <button class="secondary-content" data-bind="click: $parent.requestFriendship"><i class="material-icons icon-black">add</i></button>
+                        <button class="secondary-content btn-flat teal darken-2 white-text" data-bind="click: $parent.requestFriendship"><i class="material-icons white-text">add</i></button>
                 </li>
             </ul>
         </div>
@@ -53,11 +53,20 @@
                 <i class="material-icons circle">person</i>
                 <span class="bold" data-bind="text: userTag"></span><br />
                 <p>
-                    <span class="blue-text lighten-3">Activity:</span> <span class="grey-text lighten-2" data-bind="text: activity"></span><br>
-                    <span class="blue-text lighten-3">Remarks:</span> <span class="grey-text lighten-2" data-bind="text: remarks"></span><br>
-                    <span class="blue-text lighten-3">Date:</span> <span class="grey-text lighten-2" data-bind="text: dateLogged"></span><br>
+                    <span class="blue-grey-text lighten-3">Date:</span> <span class="grey-text lighten-2" data-bind="text: dateLogged"></span><br>
+                    <span class="blue-grey-text lighten-3">Activity:</span> <span class="grey-text lighten-2" data-bind="text: activity"></span><br>
+                    <span class="blue-grey-text lighten-3">Remarks:</span> <span class="grey-text lighten-2" data-bind="text: remarks"></span><br>
+                    <span class="blue-grey-text lighten-2">Points:</span> <span class="grey-text lighten-2" data-bind="text: points"></span><br>
+                    <span class="blue-grey-text lighten-2">Balance:</span> <span class="grey-text lighten-2" data-bind="text: balance"></span><br>
+
                 </p>
+                <!--Put if to put the right icon depending on if it's positivie or negative-->
+                <!-- ko if: points < 0 -->
+                <a href="#!" class="secondary-content"><i class="material-icons icon-black">thumb_down</i></a>
+                <!-- /ko -->
+                <!-- ko if: points > 0-->
                 <a href="#!" class="secondary-content"><i class="material-icons icon-black">fitness_center</i></a>
+                <!-- /ko -->
             </li>
         </ul>
     </div>
