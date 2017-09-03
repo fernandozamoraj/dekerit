@@ -1,6 +1,6 @@
 ﻿
 <!--LESSON - need to add app.js?v=1 to ref for js file otherwise chrom gets stuck on cached version of app.js-->
-<div id="add-friend-div" style="display: none;">
+<div id="add-friend-div">
 
     <div class="row">
         <div class="input-field col s12 onehd">
@@ -9,9 +9,9 @@
     </div>
 
     <div class="row">
-        <div class="col s6 col-sm-offset-3 col-md-offset-3 fifty">
+        <div class="col s9 onehd">
             <button href="#" class="waves-effect waves-light btn teal darken-3 fifty" data-bind="click: search">
-                <i class="material-icons left">search</i>
+                <i class="material-icons right">search</i>
                 Search
             </button>
         </div> 
@@ -35,12 +35,18 @@
 </div>
 
 
-<div class="row">
-    <div class="col s6 col-sm-offset-3 col-md-offset-3 fifty">
-        <button class="waves-effect waves-light btn teal darken-3 fifty" id="add-friend" data-bind="click: addFriend">
-            <i class="material-icons left">add</i>
-            Add Friend
-        </button>
+<div class="awaiting-approval row">
+    <div class="col s12" style="border: none;">
+        <h2 class="collection-header"><h4>Friend Requests</h4></h2>
+        <ul class="collection" data-bind="foreach: FriendRequests">
+            <li class="collection-item">
+                <div>
+                    <span data-bind="text: userTag"></span>
+                    <button data-bind="click: $parent.acceptFriendRequest" class="secondary-content">Accept</button>
+                    <button data-bind="click: $parent.rejectFriendRequest" class="secondary-content">Reject</button>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
 

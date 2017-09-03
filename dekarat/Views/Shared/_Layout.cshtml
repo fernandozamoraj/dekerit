@@ -48,13 +48,13 @@
             <div class="nav-wrapper">
                 <a href="#" class="brand-logo center teal darken-4"></a>
                 <ul id="nav-mobile" class="left">
-                    <li><a href="#" id="about-dekarat-2"><i class="material-icons left">info_outline</i></a></li>
+                    <li><a id="about-dekarat-2" data-bind="click: showAbout"><i class="material-icons left">info_outline</i></a></li>
                     <li class="hide-on-small-only"><a href="#"><i class="material-icons right">directions_bike</i></a></li>
                 </ul>
                 <ul id="nav-mobile" class="right">
                     <li class="hide-on-small-only"><a href="#"><i class="material-icons left">local_dining</i></a></li>
                     <!-- ko if: model.SignedIn() == true-->
-                    <li><a href="#" id="user-settings"><i class="material-icons right">settings</i></a></li>
+                    <li><a id="user-settings" data-bind="click: showSettings"><i class="material-icons right">settings</i></a></li>
                     <!-- /ko-->
                 </ul>
             </div>
@@ -91,6 +91,6 @@
     </script>
     <script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
     <script type="text/javascript" src="~/Scripts/materialize/materialize.min.js"></script>
-    <script type="text/javascript" src="~/Scripts/app.js?v=2.6"></script>
+    <script type="text/javascript" src="~/Scripts/app.js?v=2.10"></script>
 </body>
 </html>

@@ -45,7 +45,31 @@ function MyModel(){
     self.Message = ko.observable("")
     self.SearchEmail = ko.observable("")
     self.SearchResults = ko.observableArray()
+
+    //TODO: remove.... for initial ui only
+    self.FriendRequests = ko.observableArray(
+         [
+            { userTag: "ZM123", uid: "123" },
+            { userTag: "Test1", uid: "124" },
+            { userTag: "Test2", uid: "125" },
+            { userTag: "Test3", uid: "126" },
+            { userTag: "Test4", uid: "127" },
+            { userTag: "Test5", uid: "128" }
+         ])
+
     
+    self.acceptFriendRequest = function (friendRequest) {
+
+        updateFriendRequest(true, friendRequest)
+        Materialize.toast("You are now friends with " + friendRequest.userTag, 2000, 'green')
+    }
+
+    self.rejectFriendRequest = function (friendRequest) {
+
+        updateFriendRequest(false, friendRequest)
+        Materialize.toast("Request has been removed " + friendRequest.userTag, 2000, 'red')
+    }
+
     self.changedView = function (x) {
         handleChangeView(x)
     }
@@ -65,66 +89,65 @@ function MyModel(){
         refEntry.remove()
     }
 
-    self.addFriend = function () {
-        LOG("addFriend called....")
-        $('#add-friend-div').show()
-    }
-
     self.requestFriendship = function (friend) {
 
         LOG("requestFriendShip called...")
-
-        var first
-        var second
 
         if (friend.uid == user.uid) {
             Materialize.toast("Aww! Love it that you want to be your own friend!", 2000, "green")
             return
         }
 
-        //The concept of first and second is simply to enter records by sorted order.
-        //So for example user: AAAAAAA will be the parent record of BBBB because 
-        //alphabetically AAAAAAA comes before BBBB
-        //this way there is only ever one entry for any two friends
-        if (friend.uid < user.uid) {
+        var first = user.uid
+        var second = friend.uid
+
+        if (user.uid > friend.uid) {
             first = friend.uid
             second = user.uid
         }
-        else {
-            first = user.uid
-            second = friend.uid
-        }
 
-        var friends = database.ref("friends").child(first);
+        var friendshipKey = first + "_" + second
 
-        friends.child(second).once('value', function (snap) {
+        var ref = database.ref("friends").orderByChild('friendshipKey').equalTo(friendshipKey).limitToFirst(1)
 
-            var request = snap.val()
+        ref.once('value', function (snap) {
 
-            if (request) {
-                if (request.accepted) {
-                    Materialize.toast("This friendship already exists.", 2000, 'red')
-                }
-                else {
-                    Materialize.toast("This friendship is already pending approval.", 2000, 'red')
-                }
+            var d = new Date()
+            var snapVal = snap.val()
+
+            if (snapVal) {
+                Materialize.toast("Request already exists...", 2000, 'red')
             }
             else {
-                friends.child(second).child('accepted').set(false)
-                friends.child(second).child('requestor').set(user.uid)
-                Materialize.toast("Your request has been sent to " + friend.userTag, 2000, 'green')
+                var ref2 = database.ref('friends')
+                ref2.push({
+                        friendshipKey: friendshipKey,
+                        requestor: user.uid,
+                        acceptor: friend.uid,
+                        userTag: user.userTag,
+                        email: user.email,
+                        accepted: false
 
+                })
+
+                Materialize.toast("Request has been sent....", 2000, 'green')
             }
-        })
 
-
-        setTimeout(function () {
-            $('#add-friend-div').hide()
-            self.SearchResults([])
-            self.SearchEmail("")
+            setTimeout(function () {
+                self.SearchResults([])
+                self.SearchEmail("")
             }, 1000)
+        })        
+    }
+
+    self.showAbout = function(){
+        showAboutDialog()
     }
     
+    self.showSettings = function () {
+        Materialize.toast("User settings coming soon... please stay tuned....", 2000, 'blue')
+    }
+
     self.search = function () {
 
         LOG("search called....")
@@ -180,6 +203,52 @@ function MyModel(){
 }
 
 model = new MyModel()
+
+
+function setFriendRequests() {
+
+    LOG("Setting friend requests...")
+    var ref = database.ref('friends').orderByChild('acceptor').equalTo(user.uid).limitToFirst(20);
+    var requests = []
+
+    ref.on('value', function (snap) {
+        var tree = snap.val()
+
+        for (var prop in tree) {
+            if (tree.hasOwnProperty(prop)) {
+                var request = tree[prop]
+
+                if (request.accepted === false) {
+                    requests.push(request)
+                }
+            }
+        }
+
+        model.FriendRequests(requests)
+    })
+}
+
+function updateFriendRequest(accepted, friendRequest) {
+
+    var d = new Date()
+    var query = database.ref('friends').orderByChild('friendshipKey').equalTo(friendRequest.friendshipKey).limitToFirst(1)
+    
+    query.once('value', function (snap) {
+
+        var tree = snap.val()
+
+        if(tree){
+            if (accepted) {
+               database.ref('friends').child(getFirstProp(tree)).child('accepted').set(true)
+            }
+            else {
+                database.ref('friends').child(getFirstProp(tree)).remove()
+            }
+        }
+    })
+    
+
+}
 
 function handleChangeView(x) {
     LOG("Setting current view to " + x)
@@ -298,12 +367,8 @@ $(document).ready(function () {
     })
 
     $('#sign-out').click(signoutToMain)
-
-    $('#about-dekarat-1').click(showAboutDialog)
-    $('#about-dekarat-2').click(showAboutDialog)
     $('#see-our-video').click(seeOurVideo)
     $('#see-our-tutorial').click(seeOurTutorial)
-    $('#user-settings').click(showUserSettings)
     $('#close-about').click(closeAboutDialog)
 
 
@@ -321,11 +386,6 @@ function seeOurTutorial() {
     Materialize.toast("Our tutorial video is coming soon... please stay tuned....", 2000, 'blue')
 }
 
-function showUserSettings() {
-    Materialize.toast("User settings coming soon... please stay tuned....", 2000, 'blue')
-}
-
-
 //TODO: check for real email
 function validateSignIn(onSuccess){
 
@@ -339,6 +399,7 @@ function validateSignIn(onSuccess){
         if (firebaseUser) {
             LOG(USER_SIGNED_IN_MESSAGE)
             model.SignedIn(true)
+
         }
         else {
             LOG(USER_SIGNED_OUT_MESSAGE)
@@ -367,7 +428,10 @@ function validateSignIn(onSuccess){
                 LOG(user.email + USER_SIGNED_IN_MESSAGE)
                 model.SignedIn(true)
                 onSuccess()
+                setFriendRequests()
             })
+
+            
         }
         else {
             Materialize.toast("Failed to log in with those credentials", 2000, 'red')
@@ -376,7 +440,7 @@ function validateSignIn(onSuccess){
         }
 
     }).catch(function (e) {
-        Materialize.toast("Failed to log in... " + e.message, 2000, 'red')
+        Materialize.toast("Failed to log in... " + e.message, 6000, 'red')
         LOG(e.message)
     })
 }
