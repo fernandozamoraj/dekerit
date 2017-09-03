@@ -32,6 +32,12 @@ function getFirstProp(obj) {
 }
 
 //*****************end of setup firebase
+
+//***********************************************
+//
+//   Knockout Model Setup
+//
+//***********************************************
 var model;
 
 function MyModel(){
@@ -45,28 +51,17 @@ function MyModel(){
     self.Message = ko.observable("")
     self.SearchEmail = ko.observable("")
     self.SearchResults = ko.observableArray()
-
-    //TODO: remove.... for initial ui only
-    self.FriendRequests = ko.observableArray(
-         [
-            { userTag: "ZM123", uid: "123" },
-            { userTag: "Test1", uid: "124" },
-            { userTag: "Test2", uid: "125" },
-            { userTag: "Test3", uid: "126" },
-            { userTag: "Test4", uid: "127" },
-            { userTag: "Test5", uid: "128" }
-         ])
-
+    self.FriendRequests = ko.observableArray([])
     
     self.acceptFriendRequest = function (friendRequest) {
 
-        updateFriendRequest(true, friendRequest)
+        approveOrRejectFriendRequest(true, friendRequest)
         Materialize.toast("You are now friends with " + friendRequest.userTag, 2000, 'green')
     }
 
     self.rejectFriendRequest = function (friendRequest) {
 
-        updateFriendRequest(false, friendRequest)
+        approveOrRejectFriendRequest(false, friendRequest)
         Materialize.toast("Request has been removed " + friendRequest.userTag, 2000, 'red')
     }
 
@@ -89,34 +84,39 @@ function MyModel(){
         refEntry.remove()
     }
 
+    function createFriendshipId(userId, friendId) {
+        if (userId > friendId) {
+            return friendId + "_" + userId
+        }
+        return userId + "_" + friendId
+    }
+
+    function requestIsForSelf(friendId) {
+        if (friendId === user.uid) {
+            return true
+        }
+        return false
+    }
+
     self.requestFriendship = function (friend) {
 
         LOG("requestFriendShip called...")
 
-        if (friend.uid == user.uid) {
+        if (requestIsForSelf(friend.uid)) {
             Materialize.toast("Aww! Love it that you want to be your own friend!", 2000, "green")
             return
         }
 
-        var first = user.uid
-        var second = friend.uid
+        var friendshipKey = createFriendshipId(user.uid, friend.uid)
+        var query = database.ref("friends").orderByChild('friendshipKey').equalTo(friendshipKey).limitToFirst(1)
 
-        if (user.uid > friend.uid) {
-            first = friend.uid
-            second = user.uid
-        }
-
-        var friendshipKey = first + "_" + second
-
-        var ref = database.ref("friends").orderByChild('friendshipKey').equalTo(friendshipKey).limitToFirst(1)
-
-        ref.once('value', function (snap) {
+        query.once('value', function (snap) {
 
             var d = new Date()
             var snapVal = snap.val()
 
             if (snapVal) {
-                Materialize.toast("Request already exists...", 2000, 'red')
+                Materialize.toast("Request or friendship already exists...", 2000, 'red')
             }
             else {
                 var ref2 = database.ref('friends')
@@ -204,14 +204,19 @@ function MyModel(){
 
 model = new MyModel()
 
-
+//****************************************
+//
+//  sets the friend requests 
+//  The user must already be logged in
+//
+//****************************************
 function setFriendRequests() {
 
     LOG("Setting friend requests...")
     var ref = database.ref('friends').orderByChild('acceptor').equalTo(user.uid).limitToFirst(20);
     var requests = []
 
-    ref.on('value', function (snap) {
+    ref.once('value', function (snap) {
         var tree = snap.val()
 
         for (var prop in tree) {
@@ -228,7 +233,7 @@ function setFriendRequests() {
     })
 }
 
-function updateFriendRequest(accepted, friendRequest) {
+function approveOrRejectFriendRequest(accepted, friendRequest) {
 
     var d = new Date()
     var query = database.ref('friends').orderByChild('friendshipKey').equalTo(friendRequest.friendshipKey).limitToFirst(1)
@@ -245,9 +250,9 @@ function updateFriendRequest(accepted, friendRequest) {
                 database.ref('friends').child(getFirstProp(tree)).remove()
             }
         }
-    })
-    
 
+        setFriendRequests()
+    })
 }
 
 function handleChangeView(x) {
@@ -412,10 +417,7 @@ function validateSignIn(onSuccess){
     var promise = auth.signInWithEmailAndPassword(txtEmail.value, txtPassword.value)
         
     promise.then(function (firebaseUser) {
-
-
         if (firebaseUser) {
-
             var userref = database.ref('users/' + firebaseUser.uid)
 
             userref.once('value', function (snap) {
@@ -429,9 +431,7 @@ function validateSignIn(onSuccess){
                 model.SignedIn(true)
                 onSuccess()
                 setFriendRequests()
-            })
-
-            
+            })            
         }
         else {
             Materialize.toast("Failed to log in with those credentials", 2000, 'red')
@@ -559,7 +559,7 @@ function getHowLongAgoItHappenedFromRightNowAsFriendlyString(pastDate) {
 
 //************************END OF UTILITIES ***********************
 
-function validateDataEntered() {
+function validateAccountDataEntry() {
 
     clearInputValidity('user-tag')
     clearInputValidity('first-name')
@@ -601,7 +601,7 @@ function addCreateAccountEvents(onSuccess) {
     btnCreateAccount.addEventListener('click', function (e) {
 
 
-        var isValid = validateDataEntered();
+        var isValid = validateAccountDataEntry();
 
         if (isValid.valid === false) {
             setValidity(isValid.id, isValid.msg)
@@ -744,6 +744,8 @@ function handleNewActivityEntry() {
     var entryScore = optionVal > 1000 ? 20 : -20
 
     var newBalance = updateUserBalance(entryScore)
+
+    //TODO: remove any links from remarks
 
     //time is in milliseconds since 1970/01/01... perfect for sorting activities
 
