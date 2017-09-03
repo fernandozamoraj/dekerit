@@ -52,34 +52,14 @@
 
 <div class="row">
     <div class="col s12">
-        <ul class="collection" style="border: none;">
+        <ul class="collection" style="border: none;" data-bind="foreach: FriendsFeed">
             <li class="collection-item avatar grey lighten-2" style="margin: 5px; border-radius: 10px;">
                 <i class="material-icons circle">person</i>
-                <span class="bold">John Doe</span><br />
+                <span class="bold" data-bind="text: userTag"></span><br />
                 <p>
-                    <span class="teal-text lighten-3">Joined:</span> <span class="grey-text lighten-2" >1 day ago</span><br>
-                    <span class="teal-text lighten-3">Balance:</span> <span class="grey-text lighten-2" >5600</span><br>
-                    <span class="teal-text lighten-3">Earnd this week:</span> <span class="grey-text lighten-2" >1000</span><br>
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons icon-black">fitness_center</i></a>
-            </li>
-            <li class="collection-item avatar grey lighten-2" style="margin: 5px; border-radius: 10px;">
-                <i class="material-icons circle">person</i>
-                <span class="bold">John Doe</span><br />
-                <p>
-                    <span class="teal-text lighten-3">Joined:</span> <span class="grey-text lighten-2">1 day ago</span><br>
-                    <span class="teal-text lighten-3">Balance:</span> <span class="grey-text lighten-2">5600</span><br>
-                    <span class="teal-text lighten-3">Earnd this week:</span> <span class="grey-text lighten-2">1000</span><br>
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons icon-black">fitness_center</i></a>
-            </li>
-            <li class="collection-item avatar grey lighten-2" style="margin: 5px; border-radius: 10px;">
-                <i class="material-icons circle">person</i>
-                <span class="bold">John Doe</span><br />
-                <p>
-                    <span class="teal-text lighten-3">Joined:</span> <span class="grey-text lighten-2">1 day ago</span><br>
-                    <span class="teal-text lighten-3">Balance:</span> <span class="grey-text lighten-2">5600</span><br>
-                    <span class="teal-text lighten-3">Earnd this week:</span> <span class="grey-text lighten-2">1000</span><br>
+                    <span class="teal-text lighten-3">Activity:</span> <span class="grey-text lighten-2" data-bind="text: activity"></span><br>
+                    <span class="teal-text lighten-3">Remarks:</span> <span class="grey-text lighten-2" data-bind="text: remarks"></span><br>
+                    <span class="teal-text lighten-3">Date:</span> <span class="grey-text lighten-2" data-bind="text: dateLogged"></span><br>
                 </p>
                 <a href="#!" class="secondary-content"><i class="material-icons icon-black">fitness_center</i></a>
             </li>

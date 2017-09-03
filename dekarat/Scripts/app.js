@@ -52,6 +52,7 @@ function MyModel(){
     self.SearchEmail = ko.observable("")
     self.SearchResults = ko.observableArray()
     self.FriendRequests = ko.observableArray([])
+    self.FriendsFeed = ko.observableArray([])
     
     self.acceptFriendRequest = function (friendRequest) {
 
@@ -233,6 +234,91 @@ function setFriendRequests() {
     })
 }
 
+function getFriends(query, friends, next) {
+    query.once('value', function (snap) {
+
+        var tree = snap.val()
+
+        if (tree) {
+            for (var prop in tree) {
+                if (tree.hasOwnProperty(prop)) {
+                    var friend = tree[prop]
+
+                    if (friend.accepted === true) {
+                        if (friend.requestor === user.uid) {
+                            friends.push(friend.acceptor)
+                        }
+                        else {
+                            friends.push(friend.requestor)
+                        }
+                    }
+                }
+            }
+        }
+
+        if (next) {
+            next()
+        }
+    })
+}
+
+function getFriendsFeeds(friends, friendsFeeds) {
+
+    if (friends.length < 1) {
+        model.FriendsFeed(friendsFeeds)
+        return
+    }
+
+    var friend = friends.shift()
+    var query = database.ref('log_entries').child(friend).orderByChild('date').limitToLast(20)
+
+    var friendRef = database.ref('users').child(friend)
+
+    friendRef.once('value', function (friendSnap) {
+        if (friendSnap) {
+            var friendInfo = friendSnap.val()
+
+            query.once('value', function (snap) {
+
+                if (snap) {
+                    var tree = snap.val()
+
+                    if (tree) {
+                        for (var prop in tree) {
+                            if (tree.hasOwnProperty(prop)) {
+                                var entry = tree[prop]
+                                entry.userTag = friendInfo.userTag
+                                entry.dateLogged = getHowLongAgoItHappenedFromRightNowAsFriendlyString(entry.date)
+
+                                friendsFeeds.push(entry)
+                            }
+                        }
+                    }
+                }
+
+                getFriendsFeeds(friends, friendsFeeds)
+            })
+
+        }
+    })
+
+
+ }
+
+function setFriendsFeed() {
+    console.log("Setting friends feeds....")
+    var query = database.ref('friends').orderByChild('acceptor').equalTo(user.uid).limitToFirst(20)
+    var friends = []
+    var friendsFeeds = []
+    
+    getFriends(query, friends, function () {
+        var query2 = database.ref('friends').orderByChild('requestor').equalTo(user.uid).limitToFirst(20)
+        getFriends(query2, friends, function () {
+                getFriendsFeeds(friends, friendsFeeds)
+        })
+    })    
+}
+
 function approveOrRejectFriendRequest(accepted, friendRequest) {
 
     var d = new Date()
@@ -307,6 +393,7 @@ function handleSignIn() {
         handleChangeView("friendsfeed")
         model.Message("")
         model.Title("friends feed")
+        setFriendsFeed()
     })
 
     $('#status').click(function () {
