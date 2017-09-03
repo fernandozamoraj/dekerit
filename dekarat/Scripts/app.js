@@ -839,7 +839,16 @@ function updateUserBalance(additionalPoints) {
     var currentPoints = user['balance'] || 5000
     var newBalance = currentPoints + additionalPoints
 
+    console.log(user['balance'])
+    
     userref.child('balance').set(newBalance)
+
+    //My supsicion is that before we were handling the sign it at every sign
+    //in but now we only do it when we first load the user
+    //there for the balance does not get updated on the user obj
+    //and the model
+    user.balance = newBalance
+    model.User().balance = newBalance
 
     return newBalance
 }
@@ -855,6 +864,7 @@ function handleNewActivityEntry() {
     var entryScore = optionVal > 1000 ? 20 : -20
 
     var newBalance = updateUserBalance(entryScore)
+
 
     //TODO: remove any links from remarks
 
