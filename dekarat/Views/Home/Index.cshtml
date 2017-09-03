@@ -5,6 +5,11 @@
 
 
 
+<!-- ko if: model.SignedIn() == true-->
+    @Html.Partial("menu")
+<!-- /ko -->
+
+
 
 <!-- ko if: model.CurrentView() == "main"-->
     @Html.Partial("main")
