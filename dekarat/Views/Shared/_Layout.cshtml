@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="~/Content/materialize/css/materialize.min.css" media="screen,projection" />
-    <link rel="stylesheet" href="~/Content/Site.css">
+    <link rel="stylesheet" href="~/Content/Site.css?v=1">
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 
 
@@ -20,7 +20,7 @@
 
 
     <header class="header">
-        <nav class="col s12 m9  teal darken-4 ">
+        <nav class="nav-fixed col s12 m9  teal darken-4 ">
             <div class="nav-wrapper">
                 <a class="brand-logo center teal darken-4 upper" data-bind="text: Title" id="about-dekarat-1"></a>
                 <ul id="nav-mobile" class="left">
@@ -31,35 +31,57 @@
                     <li class="hide-on-small-only"><a href="#"><i class="material-icons left">local_dining</i></a></li>
                     <li><a href="#" id="sign-out"><i class="material-icons right">power_settings_new</i></a></li>
                 </ul>
+
             </div>
         </nav>
     </header>
 
     <!-- ko if: model.SignedIn() == true-->
-    @Html.Partial("menu")
+    <div class="secondary-menu">
+        <div class="row">
+            <div class="col s2">
+                <a href="#home" id="main"><i class="material-icons">power_settings_new</i></a>
+            </div>
+            <div class="col s2">
+                <a href="#friends-feed" id="friends-feed"><i class="material-icons">people</i></a>
+            </div>
+            <div class="col s2">
+                <a href="#assesment" id="status"><i class="material-icons">assessment</i></a>
+            </div>
+            <div class="col s2">
+                <a href="#news" id="news"><i class="material-icons">description</i></a>
+            </div>
+            <div class="col s2">
+                <a href="#log-entry" id="log-item"><i class="material-icons">edit</i></a>
+            </div>
+
+        </div>
+    </div>
     <!-- /ko -->
 
-    <div class="container">
-        @RenderBody()
-    </div>
 
-    <footer class="footer">
-        <nav class="col s12   teal darken-4 ">
-            <div class="nav-wrapper">
-                <a href="#" class="brand-logo center teal darken-4"></a>
-                <ul id="nav-mobile" class="left">
-                    <li><a id="about-dekarat-2" data-bind="click: showAbout"><i class="material-icons left">info_outline</i></a></li>
-                    <li class="hide-on-small-only"><a href="#"><i class="material-icons right">directions_bike</i></a></li>
-                </ul>
-                <ul id="nav-mobile" class="right">
-                    <li class="hide-on-small-only"><a href="#"><i class="material-icons left">local_dining</i></a></li>
-                    <!-- ko if: model.SignedIn() == true-->
-                    <li><a id="user-settings" data-bind="click: showSettings"><i class="material-icons right">settings</i></a></li>
-                    <!-- /ko-->
-                </ul>
+    <main class="container">
+        @RenderBody()
+    </main>
+
+    
+    <footer class="page-footer teal darken-4">
+        <div class="container">
+            <div class="row">
+                <div class="col s3">
+                    <a class="grey-text text-lighten-3" href="#!" data-bind="click: showSettings"><i class="material-icons">settings</i></a>
+                </div>
+                <div class="col s3">
+                    <a class="grey-text text-lighten-3" href="#!" data-bind="click: showAbout"><i class="material-icons">info_outline</i></a>
+                </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                DEKARAT is an open source product hosted on
+                <a class="grey-text text-lighten-4" href="https://github.com/fernandozamoraj/dekerit" target="_blank">github</a>
             </div>
-        </nav>
-    </footer>    
+        </div>
+    </footer>   
 
     <!--script src="~/Scripts/jquery-1.10.2.min.js"></script-->
     <!--script src="~/Scripts/bootstrap.min.js"></script-->

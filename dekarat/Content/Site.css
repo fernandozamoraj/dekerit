@@ -17,6 +17,45 @@
 
 */
 
+/*Sticky header*/
+ .nav-fixed {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    margin-bottom: 0px;
+    z-index: 997;
+  }
+
+  .secondary-menu{
+    padding-top: 20px;
+    background-color: white;
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 55px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+
+    z-index: 997;
+  }
+
+  body {
+    padding-top: 80px;
+    margin-top: 40px;
+  }
+
+  /*sticky footer*/
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+
 .upper{
     text-transform: uppercase;
 }
