@@ -33,16 +33,17 @@
     position: fixed;
     right: 0;
     left: 0;
-    top: 55px;
+    top: 63px;
     margin-bottom: 0px;
     margin-top: 0px;
+    opacity: 0.7;
 
     z-index: 997;
   }
 
   body {
     padding-top: 80px;
-    margin-top: 40px;
+    margin-top: 50px;
   }
 
   /*sticky footer*/

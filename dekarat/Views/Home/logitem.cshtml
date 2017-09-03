@@ -47,16 +47,16 @@
 <div class="row">
     <div class="col s12">
         <ul class="collection" data-bind="foreach: Feed" style="border: none;">
-            <li class="collection-item avatar grey lighten-2" style="margin: 5px; border-radius: 10px;">
+            <li class="collection-item avatar blue-grey lighten-5" style="margin: 5px; border-radius: 10px;">
                 <i class="material-icons circle">person</i>
                 <span class="bold" data-bind="text: displayName"></span><br />
                 <span data-bind="text: date"></span>
                 <p>
-                    <span class="teal-text lighten-3">Activity:</span> <span class="grey-text lighten-2" data-bind="text: activity"></span><br>
-                    <span class="teal-text lighten-3">Remarks:</span> <span class="grey-text lighten-2" data-bind="text: remarks"></span><br>
-                    <span class="teal-text lighten-3">Points:</span> <span class="grey-text lighten-2" data-bind="text: points"></span><br>
-                    <span class="teal-text lighten-3">Balance:</span> <span class="grey-text lighten-2" data-bind="text: balance"></span><br>
-                    <a class="btn-flat btn-large grey lighten-4" data-bind="click: $parent.deleteEntry"><i class="material-icons icon-red">cancel</i></a>
+                    <span class="blue-grey-text lighten-2">Activity:</span> <span class="grey-text lighten-2" data-bind="text: activity"></span><br>
+                    <span class="blue-grey-text lighten-2">Remarks:</span> <span class="grey-text lighten-2" data-bind="text: remarks"></span><br>
+                    <span class="blue-grey-text lighten-2">Points:</span> <span class="grey-text lighten-2" data-bind="text: points"></span><br>
+                    <span class="blue-grey-text lighten-2">Balance:</span> <span class="grey-text lighten-2" data-bind="text: balance"></span><br>
+                    <a class="btn-flat deep-orange darken-3 white-text" data-bind="click: $parent.deleteEntry">Delete<i class="material-icons white-text right">delete</i></a>
                 </p>
                 <!--Put if to put the right icon depending on if it's positivie or negative-->
                 <!-- ko if: points < 0-->

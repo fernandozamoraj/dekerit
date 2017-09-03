@@ -233,6 +233,18 @@ function setFriendRequests() {
 
         model.HasRequests(requests.length > 0)
         model.FriendRequests(requests)
+
+        //TODO bad practice... fix later
+        if (model.FriendRequests().length > 0) {
+            console.log("model.FriendRequests() > 0")
+            $('#friends-icon').removeClass('blue-grey-text')
+            $('#friends-icon').addClass('deep-orange-text')
+        }
+        else {
+            console.log("model.FriendRequests() < 1")
+            $('#friends-icon').removeClass('deep-orange-text')
+            $('#friends-icon').addClass('blue-grey-text')
+        }
     })
 }
 

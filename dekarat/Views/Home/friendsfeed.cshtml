@@ -40,7 +40,7 @@
             </li>
             <li class="collection-item" style="border-style: none;">
                 <button data-bind="click: $parent.acceptFriendRequest" class="btn-flat green lighten-1 white-text">Accept<i class="material-icons icon-white right">check</i></button>
-                <button data-bind="click: $parent.rejectFriendRequest" class="btn-flat red lighten-1 white-text">Reject<i class="material-icons icon-white right">close</i></button>
+                <button data-bind="click: $parent.rejectFriendRequest" class="btn-flat deep-orange darken-3 white-text">Reject<i class="material-icons icon-white right">close</i></button>
             </li>
         </ul>
     </div>
@@ -49,13 +49,13 @@
 <div class="row">
     <div class="col s12">
         <ul class="collection" style="border: none;" data-bind="foreach: FriendsFeed">
-            <li class="collection-item avatar grey lighten-2" style="margin: 5px; border-radius: 10px;">
+            <li class="collection-item avatar blue-grey lighten-5" style="margin: 5px; border-radius: 10px;">
                 <i class="material-icons circle">person</i>
                 <span class="bold" data-bind="text: userTag"></span><br />
                 <p>
-                    <span class="teal-text lighten-3">Activity:</span> <span class="grey-text lighten-2" data-bind="text: activity"></span><br>
-                    <span class="teal-text lighten-3">Remarks:</span> <span class="grey-text lighten-2" data-bind="text: remarks"></span><br>
-                    <span class="teal-text lighten-3">Date:</span> <span class="grey-text lighten-2" data-bind="text: dateLogged"></span><br>
+                    <span class="blue-text lighten-3">Activity:</span> <span class="grey-text lighten-2" data-bind="text: activity"></span><br>
+                    <span class="blue-text lighten-3">Remarks:</span> <span class="grey-text lighten-2" data-bind="text: remarks"></span><br>
+                    <span class="blue-text lighten-3">Date:</span> <span class="grey-text lighten-2" data-bind="text: dateLogged"></span><br>
                 </p>
                 <a href="#!" class="secondary-content"><i class="material-icons icon-black">fitness_center</i></a>
             </li>
