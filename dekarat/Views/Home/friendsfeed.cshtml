@@ -3,18 +3,14 @@
 <div id="add-friend-div">
 
     <div class="row">
-        <div class="input-field col s12 onehd">
+        <div class="input-field col s10 onehd">
             <input placeholder="friend's email" id="e-mail-search" type="email" class="validate" data-bind="value: SearchEmail">
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col s9 onehd">
-            <button href="#" class="waves-effect waves-light btn teal darken-3 fifty" data-bind="click: search">
-                <i class="material-icons right">search</i>
-                Search
+        <div class="col s2 onehd">
+            <button href="#" class="waves-effect waves-light btn-flat teal white fifty teal-text text-darken-4" data-bind="click: search">
+                <i class="material-icons left">search</i>
             </button>
-        </div> 
+        </div>
     </div>
 
     <div class="row">
@@ -35,16 +31,16 @@
 </div>
 
 
+
 <div class="awaiting-approval row">
-    <div class="col s12" style="border: none;">
-        <h2 class="collection-header"><h4>Friend Requests</h4></h2>
-        <ul class="collection" data-bind="foreach: FriendRequests">
-            <li class="collection-item">
-                <div>
-                    <span data-bind="text: userTag"></span>
-                    <button data-bind="click: $parent.acceptFriendRequest" class="secondary-content">Accept</button>
-                    <button data-bind="click: $parent.rejectFriendRequest" class="secondary-content">Reject</button>
-                </div>
+    <div class="col s12" style="border-style: none;">
+        <ul class="collection" data-bind="foreach: FriendRequests" style="border-style: none;">
+            <li class="collection-item" style="border-style: none;">
+                <span data-bind="text: userTag"></span> has sent you a friend request...
+            </li>
+            <li class="collection-item" style="border-style: none;">
+                <button data-bind="click: $parent.acceptFriendRequest" class="btn-flat green lighten-1 white-text">Accept<i class="material-icons icon-white right">check</i></button>
+                <button data-bind="click: $parent.rejectFriendRequest" class="btn-flat red lighten-1 white-text">Reject<i class="material-icons icon-white right">close</i></button>
             </li>
         </ul>
     </div>

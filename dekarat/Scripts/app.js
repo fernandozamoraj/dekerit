@@ -53,6 +53,7 @@ function MyModel(){
     self.SearchResults = ko.observableArray()
     self.FriendRequests = ko.observableArray([])
     self.FriendsFeed = ko.observableArray([])
+    self.HasRequests = ko.observable(false)
     
     self.acceptFriendRequest = function (friendRequest) {
 
@@ -230,6 +231,7 @@ function setFriendRequests() {
             }
         }
 
+        model.HasRequests(requests.length > 0)
         model.FriendRequests(requests)
     })
 }
