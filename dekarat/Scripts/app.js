@@ -317,8 +317,10 @@ function getFriendsFeeds(friends, friendsFeeds) {
     }
 
     var friend = friends.shift()
-    //var query = database.ref('log_entries').child(friend).orderByChild('date').limitToLast(20)
-    var query = database.ref('log_entries').child(friend).orderByChild('date').limitToFirst(20)
+
+    //TODO: it seems that this is not working correctly
+    var query = database.ref('log_entries').child(friend).orderByChild('date').limitToLast(20)
+    //var query = database.ref('log_entries').child(friend).orderByChild('date').limitToFirst(20)
 
     var friendRef = database.ref('users').child(friend)
 
