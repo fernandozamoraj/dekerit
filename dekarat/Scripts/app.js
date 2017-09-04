@@ -278,15 +278,47 @@ function getFriends(query, friends, next) {
     })
 }
 
+//good old bubble sort
+function sort(friendFeeds, comparator) {
+
+    var swapped
+
+    do {
+        swapped = false
+
+        for (var i = 0; i < (friendFeeds.length-1); i++) {
+            var temp
+
+            if (comparator(friendFeeds[i], friendFeeds[i + 1])) {
+                temp = friendFeeds[i]
+                friendFeeds[i] = friendFeeds[i + 1]
+                friendFeeds[i + 1] = temp
+                swapped = true
+            }
+        }
+
+    } while (swapped);
+
+    return friendFeeds
+}
+
 function getFriendsFeeds(friends, friendsFeeds) {
 
     if (friends.length < 1) {
+
+        //sort the friends feeds
+        friendsFeeds = sort(friendsFeeds, function(x, y){ 
+                                                return x.date < y.date
+                                            }
+        )
+
         model.FriendsFeed(friendsFeeds)
         return
     }
 
     var friend = friends.shift()
-    var query = database.ref('log_entries').child(friend).orderByChild('date').limitToLast(20)
+    //var query = database.ref('log_entries').child(friend).orderByChild('date').limitToLast(20)
+    var query = database.ref('log_entries').child(friend).orderByChild('date').limitToFirst(20)
 
     var friendRef = database.ref('users').child(friend)
 
