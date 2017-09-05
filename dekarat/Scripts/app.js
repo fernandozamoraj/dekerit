@@ -1,6 +1,7 @@
 ﻿
 const USER_SIGNED_OUT_MESSAGE = 'user signed out or failed to sign in...'
 const USER_SIGNED_IN_MESSAGE = ' user signed in...'
+const MAX_FRIEND_FEED_COUNT = 200
 let user = {};
 const TABLE_LOG_ENTRIES = "log_entries"
 let DEBUG = true
@@ -56,7 +57,7 @@ function MyModel(){
     self.HasRequests = ko.observable(false)
     self.Friends = ko.observableArray([])
     self.FriendsCount = ko.observable(0)
-    
+
     self.acceptFriendRequest = function (friendRequest) {
 
         approveOrRejectFriendRequest(true, friendRequest)
@@ -304,12 +305,14 @@ function sort(friendFeeds, comparator) {
 
 function getFriendsFeeds(friends, friendsFeeds) {
 
-    if (friends.length < 1) {
+    //TODO: put a limit here...
+    if (friends.length < 1 || friendsFeeds >= MAX_FRIEND_FEED_COUNT) {
 
         //sort the friends feeds
-        friendsFeeds = sort(friendsFeeds, function(x, y){ 
-                                                return x.date < y.date
-                                            }
+        friendsFeeds = sort(friendsFeeds,
+            function (x, y) {
+                 return x.date < y.date
+            }
         )
 
         model.FriendsFeed(friendsFeeds)
@@ -458,6 +461,7 @@ function handleSignIn() {
         handleChangeView("status")
         model.Message("")
         model.Title("status")
+        bindFileUploadButton()
     })
 
     $('#news').click(function () {
@@ -509,6 +513,23 @@ function closeAboutDialog() {
     $('#about-dekarat-dialog').hide();
 }
 
+function fileIsValid(file) {
+
+    var isValid = true
+
+    if (file.size > 500000) {
+        isValid = false
+    }
+
+    if (file.name.split('.').pop() != 'jpg') {
+        isValid = false
+    }
+
+    return isValid
+}
+
+
+
 $(document).ready(function () {
 
     $('#sign-in').click(function () {
@@ -520,7 +541,6 @@ $(document).ready(function () {
     $('#see-our-video').click(seeOurVideo)
     $('#see-our-tutorial').click(seeOurTutorial)
     $('#close-about').click(closeAboutDialog)
-
 
     bindCreateAccountScreen()
 
@@ -534,6 +554,73 @@ function seeOurVideo() {
 
 function seeOurTutorial() {
     Materialize.toast("Our tutorial video is coming soon... please stay tuned....", 2000, 'blue')
+}
+
+function setProfilePicUrl(next) {
+
+    var storageRef = storage.ref().child("photos").child('profile').child(user.uid + ".jpg");
+
+    user.profilePicURL = "/Content/images/default_profile_pic.png"
+
+    storageRef.getDownloadURL().then(function (url) {
+
+        LOG("Getting profile picture URL")
+        if (url) {
+            user.profilePicURL = url
+            LOG("Profile pic URL set to " + url)
+        }
+
+        if (next) {
+            next()
+            next = null
+        }
+    })
+    .catch(function (e) {
+        LOG("Profile Pic not found")
+        LOG(e.message)
+        LOG("This is normal when the user has not uploaded an image for her profile")
+        if (next) {
+            next()
+        }
+    })
+
+}
+
+function bindFileUploadButton() {
+
+    LOG("Binding upload button...")
+    var fileButton = document.getElementById('profile-pic-upload-btn')
+
+    fileButton.addEventListener('change', function (e) {
+
+        LOG("Button clicked... or something")
+        var file = e.target.files[0];
+
+        if (fileIsValid(file) === true) {
+
+            var storageRef = storage.ref('photos/profile/' + user.uid + '.' + file.name.split('.').pop())
+
+            var task = storageRef.put(file)
+
+            task.on('state_changed',
+                function progress(snapshot) {
+
+                },
+                function error(err) {
+                    Materialize.toast('You picture failed to upload...', 3000, 'red')
+                },
+                function complete() {
+                    Materialize.toast('You picture has uploaded successfully...', 3000, 'green')
+                    setProfilePicUrl(function () {
+                        model.User().profilePicURL = user.profilePicURL
+                    })
+                }
+            )
+        }
+        else {
+            Materialize.toast('File must be a jpg 500KB or smaller.', 3000, 'red')
+        }
+    })
 }
 
 //TODO: check for real email
@@ -568,14 +655,17 @@ function validateSignIn(onSuccess){
             userref.once('value', function (snap) {
                 LOG("gettting user data...")
                 user = snap.val()
-                user.joined_date = getHowLongAgoItHappenedFromRightNowAsFriendlyString( user.joined )
-                model.User(user)
-                LOG("user = snap.val()")
-                LOG(user)
-                LOG(user.email + USER_SIGNED_IN_MESSAGE)
-                model.SignedIn(true)
-                onSuccess()
-                setFriendRequests()
+                user.joined_date = getHowLongAgoItHappenedFromRightNowAsFriendlyString(user.joined)
+                setProfilePicUrl(function () {
+
+                    model.User(user)
+                    LOG("user = snap.val()")
+                    LOG(user)
+                    LOG(user.email + USER_SIGNED_IN_MESSAGE)
+                    model.SignedIn(true)
+                    onSuccess()
+                    setFriendRequests()
+                })                
             })            
         }
         else {
@@ -654,8 +744,6 @@ function getHowLongAgoItHappenedFromRightNowAsFriendlyString(pastDate) {
     var days = Math.floor(hours / 24)
     var months = Math.floor(days / 30)
     var years = Math.floor(days / 365)
-
-    LOG("diff: " + diff)
 
     var returnVal = ''
 

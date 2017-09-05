@@ -3,11 +3,15 @@
     <div class="col s12 m9">
         <ul class="collection">
             <li class="collection-item avatar">
-                <i class="material-icons circle blue darken-2">person</i>
+                <!--img src="/Content/images/default_profile_pic.png" alt="profile_picture" class="circle" /-->
+                <img data-bind="attr: {src: User().profilePicURL}" alt="profile_picture" class="circle" />
+
+                <!--i class="material-icons circle blue darken-2">person</i-->
                 <span class="title" data-bind="text: model.User().displayName"></span>
                 <p>
                     Joined: <br>
-                    <span data-bind="text: model.User().joined_date"></span>
+                    <span data-bind="text: model.User().joined_date"></span><br />
+                    <input type="file" value="Upload Picure" class="deep-orange darken-2 white-text btn-flat" id="profile-pic-upload-btn">Upload Picture
                 </p>
                 <a href="#!" class="secondary-content"><i class="material-icons icon-yellow">grade</i></a>
             </li>
