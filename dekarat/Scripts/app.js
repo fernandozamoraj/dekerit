@@ -541,7 +541,7 @@ function fileIsValid(file) {
 
     var isValid = true
 
-    if (file.size > 500000) {
+    if (file.size > 2300100) {
         isValid = false
     }
 
@@ -663,7 +663,7 @@ function bindFileUploadButton() {
             )
         }
         else {
-            Materialize.toast('File must be a jpg 500KB or smaller.', 3000, 'red')
+            Materialize.toast('File must be a jpg 2MB or smaller.', 3000, 'red')
         }
     })
 }
