@@ -697,10 +697,12 @@ function validateSignIn(onSuccess){
                 LOG("gettting user data...")
                 user = snap.val()
                 user.joined_date = getHowLongAgoItHappenedFromRightNowAsFriendlyString(user.joined)
+                user.profilePicURL = user.profilePicURL || "/Content/images/default_profile_pic.png"
                 model.User(user)
                 LOG("user = snap.val()")
                 LOG(user)
                 LOG(user.email + USER_SIGNED_IN_MESSAGE)
+                LOG("Profile pic URL: " + user.profilePicURL)
                 model.SignedIn(true)
                 onSuccess()
                 setFriendRequests()
