@@ -599,7 +599,7 @@ function setProfilePicUrl(next) {
 
     var storageRef = storage.ref().child("photos").child('profile').child(user.uid + ".JPG");
 
-    user.profilePicURL = "/Content/images/default_profile_pic.png"
+    user.profilePicURL = "/Content/images/default_profile_pic.PNG"
 
     storageRef.getDownloadURL().then(function (url) {
 
@@ -610,7 +610,7 @@ function setProfilePicUrl(next) {
         }
 
         if (next) {
-            next()
+            next(url)
             next = null
         }
     })
@@ -619,7 +619,7 @@ function setProfilePicUrl(next) {
         LOG(e.message)
         LOG("This is normal when the user has not uploaded an image for her profile")
         if (next) {
-            next()
+            next("/Content/images/default_profile_pic.PNG")
         }
     })
 
@@ -650,10 +650,10 @@ function bindFileUploadButton() {
                 },
                 function complete() {
                     Materialize.toast('You picture has uploaded successfully...', 3000, 'green')
-                    setProfilePicUrl(function () {
-                        model.User().profilePicURL = user.profilePicURL
+                    setProfilePicUrl(function (url) {
+                        model.User().profilePicURL = url
 
-                        database.ref('users').child(user.uid).child('profilePicURL').set(user.profilePicURL)
+                        database.ref('users').child(user.uid).child('profilePicURL').set(url)
                     })
                 }
             )
@@ -697,16 +697,13 @@ function validateSignIn(onSuccess){
                 LOG("gettting user data...")
                 user = snap.val()
                 user.joined_date = getHowLongAgoItHappenedFromRightNowAsFriendlyString(user.joined)
-                setProfilePicUrl(function () {
-
-                    model.User(user)
-                    LOG("user = snap.val()")
-                    LOG(user)
-                    LOG(user.email + USER_SIGNED_IN_MESSAGE)
-                    model.SignedIn(true)
-                    onSuccess()
-                    setFriendRequests()
-                })                
+                model.User(user)
+                LOG("user = snap.val()")
+                LOG(user)
+                LOG(user.email + USER_SIGNED_IN_MESSAGE)
+                model.SignedIn(true)
+                onSuccess()
+                setFriendRequests()
             })            
         }
         else {
