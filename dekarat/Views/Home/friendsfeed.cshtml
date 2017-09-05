@@ -50,7 +50,9 @@
     <div class="col s12">
         <ul class="collection" style="border: none;" data-bind="foreach: FriendsFeed">
             <li class="collection-item avatar blue-grey lighten-5" style="margin: 5px; border-radius: 10px;">
-                <i class="material-icons circle">person</i>
+                <img data-bind="attr: {src: profilePicURL}" alt="profile_picture" class="circle" />
+                <!-- img src="/Content/images/default_profile_pic.png" alt="profile_picture" class="circle" /-->
+                <!--i class="material-icons circle">person</i-->
                 <span class="bold" data-bind="text: userTag"></span><br />
                 <p>
                     <span class="blue-grey-text lighten-3">Date:</span> <span class="grey-text lighten-2" data-bind="text: dateLogged"></span><br>

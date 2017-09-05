@@ -14,7 +14,6 @@ let LOG = function (x) {
     }
 }
 
-
 function getTextValue(inputId) {
     var element = document.getElementById(inputId)
     return element.value
@@ -303,7 +302,7 @@ function sort(friendFeeds, comparator) {
     return friendFeeds
 }
 
-function getFriendsFeeds(friends, friendsFeeds) {
+function getFriendsFeeds(friends, friendsFeeds, onSuccess) {
 
     //TODO: put a limit here...
     if (friends.length < 1 || friendsFeeds >= MAX_FRIEND_FEED_COUNT) {
@@ -316,13 +315,18 @@ function getFriendsFeeds(friends, friendsFeeds) {
         )
 
         model.FriendsFeed(friendsFeeds)
+
+        if (onSuccess) {
+            onSuccess()
+        }
+
         return
     }
 
     var friend = friends.shift()
 
     //TODO: it seems that this is not working correctly
-    var query = database.ref('log_entries').child(friend).orderByChild('date').limitToLast(20)
+    var logEntriesQuery = database.ref('log_entries').child(friend).orderByChild('date').limitToLast(20)
     //var query = database.ref('log_entries').child(friend).orderByChild('date').limitToFirst(20)
 
     var friendRef = database.ref('users').child(friend)
@@ -331,16 +335,31 @@ function getFriendsFeeds(friends, friendsFeeds) {
         if (friendSnap) {
             var friendInfo = friendSnap.val()
 
-            query.once('value', function (snap) {
+            logEntriesQuery.once('value', function (snap) {
 
                 if (snap) {
                     var tree = snap.val()
 
                     if (tree) {
+
+                        //Each prop in the tree is an entry
+                        //assuming that the log entries tree looks like this
+                        //  lsadfOIFUERlasdfower: {           //friends user id
+                        //
+                        //          123143442344:{            //date of entry
+                        //
+                        //                date:
+                        //                activity:
+                        //
+                        //           },
+                        //           92837923492834:
+                        //
+                        //
                         for (var prop in tree) {
                             if (tree.hasOwnProperty(prop)) {
                                 var entry = tree[prop]
                                 entry.userTag = friendInfo.userTag
+                                entry.profilePicURL = friendInfo.profilePicURL || 'Content/images/default_profile_pic.PNG'
                                 entry.dateLogged = getHowLongAgoItHappenedFromRightNowAsFriendlyString(entry.date)
 
                                 friendsFeeds.push(entry)
@@ -349,16 +368,14 @@ function getFriendsFeeds(friends, friendsFeeds) {
                     }
                 }
 
-                getFriendsFeeds(friends, friendsFeeds)
+                getFriendsFeeds(friends, friendsFeeds, onSuccess)
             })
 
         }
     })
-
-
  }
 
-function setFriendsFeed() {
+function setFriendsFeed(onSuccess) {
     console.log("Setting friends feeds....")
     var query = database.ref('friends').orderByChild('acceptor').equalTo(user.uid).limitToFirst(20)
     var friends = []
@@ -368,14 +385,19 @@ function setFriendsFeed() {
         var query2 = database.ref('friends').orderByChild('requestor').equalTo(user.uid).limitToFirst(20)
         getFriends(query2, friends, function () {
 
+
             //Get the actual friends for other purposes
             //TODO: later we will need a list of all friends
             for (var i = 0; i < friends.length; i++) {
-                model.Friends.push({ uid: friends[i] })
+                let tempFriend = {}
+
+                tempFriend.uid = friends[i]
+                model.Friends.push(tempFriend)
             }
+
             model.FriendsCount(friends.length)
 
-            getFriendsFeeds(friends, friendsFeeds)
+            getFriendsFeeds(friends, friendsFeeds, onSuccess)
         })
     })    
 }
@@ -451,10 +473,12 @@ function handleSignIn() {
     })
 
     $('#friends-feed').click(function () {
-        handleChangeView("friendsfeed")
-        model.Message("")
-        model.Title("friends feed")
-        setFriendsFeed()
+
+        setFriendsFeed(function () {
+            model.Message("")
+            model.Title("friends feed")
+            handleChangeView("friendsfeed")
+        })
     })
 
     $('#status').click(function () {
@@ -556,6 +580,25 @@ function seeOurTutorial() {
     Materialize.toast("Our tutorial video is coming soon... please stay tuned....", 2000, 'blue')
 }
 
+function getProfilePicUrl(tempUser, uid) {
+
+    var storageRef = storage.ref().child("photos").child('profile').child(uid + ".jpg");
+
+    tempUser.profilePicURL = "/Content/images/default_profile_pic.png"
+
+    storageRef.getDownloadURL().then(function (url) {
+
+        if (url) {
+            tempUser.profilePicURL = url
+        }
+    })
+    .catch(function (e) {
+        LOG("Error gettting profile pic URL for a user")
+        LOG(e.message)
+    })
+
+}
+
 function setProfilePicUrl(next) {
 
     var storageRef = storage.ref().child("photos").child('profile').child(user.uid + ".jpg");
@@ -613,6 +656,8 @@ function bindFileUploadButton() {
                     Materialize.toast('You picture has uploaded successfully...', 3000, 'green')
                     setProfilePicUrl(function () {
                         model.User().profilePicURL = user.profilePicURL
+
+                        database.ref('users').child(user.uid).child('profilePicURL').set(user.profilePicURL)
                     })
                 }
             )
