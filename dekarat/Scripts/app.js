@@ -578,7 +578,7 @@ function seeOurTutorial() {
 
 function getProfilePicUrl(tempUser, uid) {
 
-    var storageRef = storage.ref().child("photos").child('profile').child(uid + ".jpg");
+    var storageRef = storage.ref().child("photos").child('profile').child(uid + ".JPG");
 
     tempUser.profilePicURL = "/Content/images/default_profile_pic.png"
 
@@ -597,7 +597,7 @@ function getProfilePicUrl(tempUser, uid) {
 
 function setProfilePicUrl(next) {
 
-    var storageRef = storage.ref().child("photos").child('profile').child(user.uid + ".jpg");
+    var storageRef = storage.ref().child("photos").child('profile').child(user.uid + ".JPG");
 
     user.profilePicURL = "/Content/images/default_profile_pic.png"
 
@@ -637,7 +637,7 @@ function bindFileUploadButton() {
 
         if (fileIsValid(file) === true) {
 
-            var storageRef = storage.ref('photos/profile/' + user.uid + '.' + file.name.split('.').pop())
+            var storageRef = storage.ref('photos/profile/' + user.uid + '.' + (file.name.split('.').pop().toUpperCase()))
 
             var task = storageRef.put(file)
 
