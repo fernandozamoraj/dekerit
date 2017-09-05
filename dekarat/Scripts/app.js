@@ -545,10 +545,6 @@ function fileIsValid(file) {
         isValid = false
     }
 
-    if (file.name.split('.').pop() != 'jpg') {
-        isValid = false
-    }
-
     return isValid
 }
 
