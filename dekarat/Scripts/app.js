@@ -654,6 +654,7 @@ function bindFileUploadButton() {
 
             var storageRef = storage.ref('photos/profile/' + user.uid + '.' + (file.name.split('.').pop().toUpperCase()))
 
+            startWaitCursor()
             var task = storageRef.put(file)
 
             task.on('state_changed',
@@ -661,14 +662,18 @@ function bindFileUploadButton() {
 
                 },
                 function error(err) {
+                    endWaitCursor()
                     Materialize.toast('You picture failed to upload...', 3000, 'red')
+                   
                 },
                 function complete() {
+                    
                     Materialize.toast('You picture has uploaded successfully...', 3000, 'green')
                     setProfilePicUrl(function (url) {
                         model.User().profilePicURL = url
 
                         database.ref('users').child(user.uid).child('profilePicURL').set(url)
+                        endWaitCursor()
                     })
                 }
             )
