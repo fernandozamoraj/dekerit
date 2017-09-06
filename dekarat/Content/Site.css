@@ -136,6 +136,11 @@ i.icon-menu-log{
     background-color: #696;
 }
 
+i.selected_menu{
+    background-color: #38a;
+    color: #eee;
+}
+
 .card{
     background-color: #355;
 }
@@ -143,5 +148,33 @@ i.icon-menu-log{
 .body{
     color: #455
 }
+
+.background-waiting{
+    background-color: black;
+}
+
+.foreground-waiting{
+    opacity: .3;
+}
+
+/*
+#wait-cursor{
+    padding-top: 20px;
+    background-color: #ccc;
+    color: white;
+    position: fixed;
+    width: 75%;
+    height: 50%;
+    right: auto;
+    left: 100px;
+    top: 163px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    opacity: 1.0;
+
+    z-index: 998;
+}
+*/
+
 
 

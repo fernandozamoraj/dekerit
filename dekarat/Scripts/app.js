@@ -460,6 +460,18 @@ function bindCreateAccountScreen() {
     })
 }
 
+function startWaitCursor() {
+    $("body").addClass("background-waiting")
+    $("main").addClass("foreground-waiting")
+    $('#wait-cursor').show();
+}
+
+function endWaitCursor() {
+    $("body").removeClass("background-waiting")
+    $("main").removeClass("foreground-waiting")
+    $('#wait-cursor').hide();
+}
+
 function handleSignIn() {
 
     model.SignedIn(true)
@@ -474,10 +486,12 @@ function handleSignIn() {
 
     $('#friends-feed').click(function () {
 
+        startWaitCursor()
         setFriendsFeed(function () {
             model.Message("")
             model.Title("friends feed")
             handleChangeView("friendsfeed")
+            endWaitCursor()
         })
     })
 
@@ -561,6 +575,7 @@ $(document).ready(function () {
     $('#see-our-video').click(seeOurVideo)
     $('#see-our-tutorial').click(seeOurTutorial)
     $('#close-about').click(closeAboutDialog)
+    $('#wait-cursor').hide()
 
     bindCreateAccountScreen()
 
