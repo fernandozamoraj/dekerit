@@ -559,6 +559,14 @@ function fileIsValid(file) {
         isValid = false
     }
 
+    var extension = file.name.split('.').pop().toUpperCase()
+
+    if(!(extension === "JPG" || extension === "PNG" || extension == "BMP")) {
+        isValid = false
+    }
+
+    
+
     return isValid
 }
 
@@ -593,7 +601,8 @@ function seeOurTutorial() {
 
 function getProfilePicUrl(tempUser, uid) {
 
-    var storageRef = storage.ref().child("photos").child('profile').child(uid + ".JPG");
+    //Solve this proble... but allows you to only download jpgs...
+    var storageRef = storage.ref().child("photos").child('profile').child(uid);
 
     tempUser.profilePicURL = "/Content/images/default_profile_pic.png"
 
@@ -612,7 +621,7 @@ function getProfilePicUrl(tempUser, uid) {
 
 function setProfilePicUrl(next) {
 
-    var storageRef = storage.ref().child("photos").child('profile').child(user.uid + ".JPG");
+    var storageRef = storage.ref().child("photos").child('profile').child(user.uid);
 
     user.profilePicURL = "/Content/images/default_profile_pic.PNG"
 
@@ -652,7 +661,7 @@ function bindFileUploadButton() {
 
         if (fileIsValid(file) === true) {
 
-            var storageRef = storage.ref('photos/profile/' + user.uid + '.' + (file.name.split('.').pop().toUpperCase()))
+            var storageRef = storage.ref('photos/profile/' + user.uid)
 
             startWaitCursor()
             var task = storageRef.put(file)
@@ -670,8 +679,8 @@ function bindFileUploadButton() {
                     
                     Materialize.toast('You picture has uploaded successfully...', 3000, 'green')
                     setProfilePicUrl(function (url) {
-                        model.User().profilePicURL = url
-
+                        user.profilePicURL = url
+                        model.User(user)
                         database.ref('users').child(user.uid).child('profilePicURL').set(url)
                         endWaitCursor()
                     })
@@ -679,7 +688,7 @@ function bindFileUploadButton() {
             )
         }
         else {
-            Materialize.toast('File must be a jpg 2MB or smaller.', 3000, 'red')
+            Materialize.toast('File must be a jpg/png/gif 2MB or smaller.', 3000, 'red')
         }
     })
 }
