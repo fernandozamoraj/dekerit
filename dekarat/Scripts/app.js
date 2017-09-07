@@ -941,7 +941,7 @@ function addCreateAccountEvents(onSuccess) {
             createUser,
             function () {
                             
-                    Materialize.toast('user tag ' + usertag+ ' is already in use', 2000)
+                    Materialize.toast('user tag ' + usertag+ ' is already in use', 3000, 'red')
             })
 
 
