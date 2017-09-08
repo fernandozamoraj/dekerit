@@ -56,6 +56,7 @@ function MyModel(){
     self.HasRequests = ko.observable(false)
     self.Friends = ko.observableArray([])
     self.FriendsCount = ko.observable(0)
+    self.ProfilePicURL = ko.observable("~/Content/images/default_profile_pic.PNG")
 
     self.acceptFriendRequest = function (friendRequest) {
 
@@ -733,6 +734,7 @@ function validateSignIn(onSuccess){
                 LOG(user.email + USER_SIGNED_IN_MESSAGE)
                 LOG("Profile pic URL: " + user.profilePicURL)
                 model.SignedIn(true)
+                model.ProfilePicURL(user.profilePicURL)
                 onSuccess()
                 setFriendRequests()
             })            

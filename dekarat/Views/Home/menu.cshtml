@@ -1,14 +1,14 @@
 ﻿<div class="secondary-menu">
     <div class="row">
-        <div class="col s2 offset-m1 offset-s1">
-            <a href="#home"><img src="~/Content/images/default_profile_pic.PNG" alt="" class="circle" style="width: 25px; height: 25px;" /></a>
-        </div> 
-        <div class="col s2">
+
+        <div class="col s2 offset-m1 offset-m1">
             <a href="#friends-feed" id="friends-feed"><i class="material-icons blue-grey-text text-darken-3" id="friends-icon" data-bind="css: { selected_menu: CurrentView() == 'friendsfeed'}">people</i></a>
         </div>
         <div class="col s2">
-            <a href="#assesment" id="status"><i class="material-icons blue-grey-text text-darken-3" data-bind="css: { selected_menu: CurrentView() == 'status'}">assessment</i></a>
-        </div>
+            <a href="#assesment" id="status">
+                <img data-bind="attr: {src: ProfilePicURL}" alt="pic" class="circle" style="width: 25px; height: 25px;" />
+            </a>
+        </div> 
         <div class="col s2">
             <a href="#news" id="news"><i class="material-icons blue-grey-text text-darken-3" data-bind="css: { selected_menu: CurrentView() == 'news'}">description</i></a>
         </div>
