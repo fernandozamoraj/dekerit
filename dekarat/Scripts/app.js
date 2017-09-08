@@ -56,7 +56,7 @@ function MyModel(){
     self.HasRequests = ko.observable(false)
     self.Friends = ko.observableArray([])
     self.FriendsCount = ko.observable(0)
-    self.ProfilePicURL = ko.observable("~/Content/images/default_profile_pic.PNG")
+    self.ProfilePicURL = ko.observable("Content/images/default_profile_pic.PNG")
 
     self.acceptFriendRequest = function (friendRequest) {
 
