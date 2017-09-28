@@ -158,6 +158,8 @@ function MyModel(){
         LOG("search called....")
         LOG("searching for " +self.SearchEmail())
 
+        let searchField = 'email'
+
         const query = database.ref('users')
                         .orderByChild('email')
                         .equalTo(self.SearchEmail())
@@ -166,26 +168,6 @@ function MyModel(){
         query.on('value', function(snap){
   
             var users = snap.val()
-
-            //users is the full table of users with each nested object by key
-            //in order to get the extract the object we must know it's name
-            //Since the name is the users id, which is a cryptic value
-            //we must extract it dynamically by getting the first property
-            //
-            //So if you have a return obje of users like this
-            //
-            //  {
-            //       osufoiUOFUsdfsodfjaosuf:{
-            //              uid: osufoiUOFUsdfsodfjaosuf,
-            //              email: 'somethin@yahoo.com',
-            ///             ....
-            //       }
-            // }
-            //
-            // you have to extract users.osufoiUOFUsdfsodfjaosuf
-            // but there is no way to know that name since it's a key
-            // so a way to extract it via reflection by getting the first property out
-            // of the root json object
             var firstPropName = getFirstProp(users)
             var resultUser = null
 
@@ -201,6 +183,7 @@ function MyModel(){
                 self.SearchResults.push(resultUser)
             }
             else {
+                
                 Materialize.toast("No results found for email " + self.SearchEmail(), 2000, 'red')
             }
         })
